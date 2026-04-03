@@ -197,6 +197,23 @@ body{font-family:'Cairo',sans-serif;background:var(--bg-void);color:var(--text);
 .review-date{font-size:11px;color:var(--text-dim)}
 .review-stars{color:var(--warning);font-size:14px;margin-bottom:10px;letter-spacing:2px}
 .review-text{font-size:13px;color:var(--text-muted);line-height:1.7}
+.review-pending{border-color:rgba(245,158,11,.2)!important}
+.review-pending::after{content:'⏳ في انتظار الموافقة';position:absolute;top:12px;left:12px;font-size:9px;font-weight:700;letter-spacing:.5px;padding:3px 8px;border-radius:5px;background:rgba(245,158,11,.15);color:var(--warning);border:1px solid rgba(245,158,11,.2)}
+
+/* Write review form */
+.write-review-wrap{background:linear-gradient(145deg,rgba(16,13,34,.9),rgba(10,8,22,.95));border:1px solid rgba(139,92,246,.2);border-radius:20px;padding:28px;margin-bottom:40px;position:relative}
+.write-review-wrap::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--primary),var(--accent),transparent);border-radius:20px 20px 0 0}
+.write-review-title{font-size:17px;font-weight:700;color:var(--text);margin-bottom:6px}
+.write-review-sub{font-size:13px;color:var(--text-muted);margin-bottom:22px}
+.star-picker{display:flex;gap:6px;margin-bottom:18px;flex-direction:row-reverse;justify-content:flex-end}
+.star-picker input{display:none}
+.star-picker label{font-size:30px;cursor:pointer;color:var(--text-dim);transition:color .15s,transform .15s;line-height:1}
+.star-picker label:hover,.star-picker label:hover~label,.star-picker input:checked~label{color:var(--warning);transform:scale(1.1)}
+.review-submit-btn{padding:11px 28px;border-radius:11px;background:linear-gradient(135deg,var(--primary-dark),var(--primary));color:#fff;font-size:14px;font-weight:700;border:none;cursor:pointer;font-family:'Cairo',sans-serif;transition:all .25s;box-shadow:0 4px 16px rgba(139,92,246,.35);margin-top:4px}
+.review-submit-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(139,92,246,.55)}
+.review-login-prompt{display:flex;align-items:center;gap:14px;padding:18px 22px;background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.15);border-radius:14px;margin-bottom:40px;font-size:14px;color:var(--text-muted)}
+.review-login-prompt a{color:var(--primary-bright);font-weight:700;cursor:pointer;text-decoration:none}
+.review-login-prompt a:hover{text-decoration:underline}
 
 /* ---- CART SIDEBAR ---- */
 #cart-sidebar{position:fixed;top:0;right:-440px;width:440px;max-width:100vw;height:100vh;background:linear-gradient(180deg,rgba(12,10,28,.98) 0%,rgba(8,6,20,.98) 100%);border-left:1px solid rgba(139,92,246,.2);z-index:1100;transition:right .38s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;backdrop-filter:blur(30px);box-shadow:-20px 0 60px rgba(0,0,0,.5)}
@@ -592,7 +609,7 @@ body.ltr .orders-table th{text-align:left}
         <button class="btn-hero-ghost" onclick="showSection('reviews')">آراء العملاء</button>
       </div>
       <div class="hero-stats">
-        <div class="stat-item"><div class="stat-num">+85</div><div class="stat-label">عميل راضٍ</div></div>
+        <div class="stat-item"><div class="stat-num">+5200</div><div class="stat-label">عميل راضٍ</div></div>
         <div class="stat-item"><div class="stat-num">+20</div><div class="stat-label">منتج رقمي</div></div>
         <div class="stat-item"><div class="stat-num">24/7</div><div class="stat-label">دعم فني</div></div>
         <div class="stat-item"><div class="stat-num">100%</div><div class="stat-label">ضمان الجودة</div></div>
@@ -633,6 +650,10 @@ body.ltr .orders-table th{text-align:left}
         <div class="section-label">آراء العملاء</div>
         <h2 class="section-title">ماذا يقول <span>عملاؤنا؟</span></h2>
       </div>
+
+      <!-- Write review form (shown when logged in) -->
+      <div id="review-form-wrap"></div>
+
       <div class="reviews-grid" id="reviews-grid"></div>
     </section>
   </div>
@@ -682,6 +703,7 @@ body.ltr .orders-table th{text-align:left}
       <button class="admin-tab active" onclick="switchAdminTab('orders',this)">📋 الطلبات</button>
       <button class="admin-tab" onclick="switchAdminTab('products',this)">📦 المنتجات</button>
       <button class="admin-tab" onclick="switchAdminTab('categories',this)">🏷️ الفئات</button>
+      <button class="admin-tab" onclick="switchAdminTab('reviews-admin',this)">⭐ التقييمات</button>
       <button class="admin-tab" onclick="switchAdminTab('homepage',this)">🏠 الرئيسية</button>
       <button class="admin-tab" onclick="switchAdminTab('discord',this)">🤖 Discord Bot</button>
       <button class="admin-tab" onclick="switchAdminTab('settings',this)">⚙️ الإعدادات</button>
@@ -737,6 +759,21 @@ body.ltr .orders-table th{text-align:left}
       </div>
     </div>
 
+    <!-- REVIEWS ADMIN TAB -->
+    <div class="admin-tab-content" id="tab-reviews-admin">
+      <div class="orders-section">
+        <div class="orders-toolbar">
+          <div class="orders-toolbar-title">⭐ إدارة التقييمات</div>
+          <div class="filter-tabs">
+            <button class="filter-tab active" onclick="filterAdminReviews('all',event)">الكل</button>
+            <button class="filter-tab" onclick="filterAdminReviews('pending',event)">⏳ معلقة</button>
+            <button class="filter-tab" onclick="filterAdminReviews('approved',event)">✅ مقبولة</button>
+          </div>
+        </div>
+        <div id="admin-reviews-list" style="padding:16px 22px;display:flex;flex-direction:column;gap:12px"></div>
+      </div>
+    </div>
+
     <!-- HOMEPAGE TAB -->
     <div class="admin-tab-content" id="tab-homepage">
       <div class="homepage-editor">
@@ -781,28 +818,34 @@ body.ltr .orders-table th{text-align:left}
     <div class="admin-tab-content" id="tab-discord">
       <div class="discord-settings">
         <div class="ds-title"><span style="font-size:22px">🤖</span> إعدادات Discord Bot</div>
-        <div class="ds-subtitle">ربط البوت لإرسال إشعارات الطلبات تلقائياً للعملاء وغرفة الستاف</div>
+        <div class="ds-subtitle">إرسال إشعارات الطلبات للعملاء والستاف عبر Discord</div>
+
+        <div class="ds-section">
+          <div class="ds-section-label">🔑 Bot Token <span class="ds-badge required">مطلوب للـ DM</span></div>
+          <div class="form-hint" style="margin-bottom:10px">من <strong>discord.com/developers</strong> → New App → Bot → Reset Token → Copy</div>
+          <input class="form-input" type="password" id="bot-token" placeholder="Bot Token (MTxx...)">
+          <div class="form-hint" style="color:var(--warning);margin-top:6px">⚠️ فعّل "Message Content Intent" و "Server Members Intent" من صفحة البوت</div>
+        </div>
+
+        <div class="ds-section">
+          <div class="ds-section-label">🌐 CORS Proxy</div>
+          <div class="form-hint" style="margin-bottom:10px">مطلوب لإرسال DM من المتصفح مباشرة — القيمة الافتراضية تعمل بدون إعداد</div>
+          <input class="form-input" type="text" id="cors-proxy" placeholder="https://corsproxy.io/?url=" value="https://corsproxy.io/?url=">
+        </div>
 
         <div class="ds-section">
           <div class="ds-section-label">📡 Webhook غرفة الستاف <span class="ds-badge required">مطلوب</span></div>
-          <div class="form-hint" style="margin-bottom:10px">انتقل إلى غرفة Discord > Edit Channel > Integrations > Create Webhook > Copy Webhook URL</div>
+          <div class="form-hint" style="margin-bottom:10px">الغرفة اللي تريد إشعارات الطلبات فيها: Edit Channel → Integrations → Create Webhook → Copy URL</div>
           <input class="form-input" type="url" id="staff-webhook" placeholder="https://discord.com/api/webhooks/xxxxx/yyyyy">
           <div class="ds-test-row">
-            <button class="ds-test-btn" onclick="testStaffWebhook()">🧪 اختبار الـ Webhook</button>
+            <button class="ds-test-btn" onclick="testStaffWebhook()">🧪 اختبار</button>
             <span id="staff-webhook-status"></span>
           </div>
         </div>
 
         <div class="ds-section">
-          <div class="ds-section-label">🔑 Bot Token <span class="ds-badge required">مطلوب للـ DM</span></div>
-          <div class="form-hint" style="margin-bottom:10px">من <strong>discord.com/developers</strong> > التطبيق > Bot > Token. يُستخدم لإرسال DM للعملاء مباشرة</div>
-          <input class="form-input" type="password" id="bot-token" placeholder="Bot Token (MTxx...)">
-          <div class="form-hint" style="color:var(--warning)">⚠️ لإرسال DM، يجب أن يكون العميل في نفس سيرفر البوت أو يكون DM مفتوحاً</div>
-        </div>
-
-        <div class="ds-section">
-          <div class="ds-section-label">📣 Webhook للعملاء (اختياري) <span class="ds-badge optional">بديل للـ DM</span></div>
-          <div class="form-hint" style="margin-bottom:10px">غرفة عامة لإشعارات العملاء (إن لم يكن Bot Token متاحاً)</div>
+          <div class="ds-section-label">📣 Webhook العملاء <span class="ds-badge optional">بديل للـ DM</span></div>
+          <div class="form-hint" style="margin-bottom:10px">إن لم يكن للعميل Discord User ID يُرسل هنا بدلاً من DM</div>
           <input class="form-input" type="url" id="customer-webhook" placeholder="https://discord.com/api/webhooks/xxxxx/yyyyy">
           <div class="ds-test-row">
             <button class="ds-test-btn" onclick="testCustomerWebhook()">🧪 اختبار</button>
@@ -811,9 +854,14 @@ body.ltr .orders-table th{text-align:left}
         </div>
 
         <div class="ds-section">
-          <div class="ds-section-label">🌐 CORS Proxy (مطلوب للـ DM API)</div>
-          <div class="form-hint" style="margin-bottom:10px">لتجاوز CORS عند إرسال DM من المتصفح. استخدم <code style="background:rgba(139,92,246,.1);padding:2px 6px;border-radius:4px">https://corsproxy.io/?</code> أو خادمك الخاص</div>
-          <input class="form-input" type="text" id="cors-proxy" placeholder="https://corsproxy.io/?" value="https://corsproxy.io/?">
+          <div class="ds-section-label">🧪 اختبار DM مباشر</div>
+          <div class="form-hint" style="margin-bottom:10px">تأكد أن البوت يقدر يرسل DM — أدخل Discord User ID لتجربة الإرسال</div>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            <input class="form-input" type="text" id="dm-test-id" placeholder="Discord User ID مثال: 123456789012345678" style="flex:1;min-width:200px">
+            <button class="ds-test-btn" onclick="testDM()" style="flex-shrink:0">📩 إرسال DM تجريبي</button>
+          </div>
+          <div id="dm-test-status" style="margin-top:8px"></div>
+          <div class="form-hint" style="margin-top:6px">للحصول على User ID: Discord → Settings → Advanced → فعّل Developer Mode → انقر يمين على اسمك → Copy User ID</div>
         </div>
 
         <div class="ds-section">
@@ -1112,8 +1160,10 @@ const DEFAULT_PRODUCTS = [
 ];
 
 const REVIEWS = [
-{name:'L7',avatar:'L',stars:5,textAr:'متجر رهيب والتسليم كان خلال دقائق عبر Discord. أنصح فيه بشدة!',textEn:'Amazing store, delivery within minutes via Discord. Highly recommend!'},
-{ name:'كنداسه',avatar:'ك', textAr:'شريت Game Pass وما صدقت السرعة! موثوق 100%', textEn:'Bought Game Pass and couldn\'t believe the speed! 100% trustworthy', stars:5 },
+  {name:'L7',avatar:'L',stars:5,textAr:'متجر رهيب والتسليم كان خلال دقائق عبر Discord. أنصح فيه بشدة!',textEn:'Amazing store, delivery within minutes via Discord. Highly recommend!'},
+  {name:'Ahmed_Pro',avatar:'A',stars:5,textAr:'اشتريت ChatGPT Plus واستلمته فوراً. سعر ممتاز وخدمة احترافية',textEn:'Bought ChatGPT Plus, got it instantly. Great price and professional service'},
+  {name:'X_Gamer',avatar:'X',stars:5,textAr:'Game Pass بسعر لا يُصدق! الدعم الفني كان سريعاً جداً',textEn:'Game Pass at unbelievable price! Support was very fast'},
+  {name:'Sara_D',avatar:'S',stars:5,textAr:'تجربة تسوق رائعة، المنتجات أصلية 100% وتصل في نفس اللحظة',textEn:'Amazing shopping experience, 100% genuine products delivered instantly'},
 ];
 
 /* ===== DB =====*/
@@ -1127,6 +1177,7 @@ async function loadDB(){
       orders: record.orders||[],
       products: record.products||null,
       categories: record.categories||null,
+      reviews: record.reviews||[],
       homepageSettings: record.homepageSettings||{},
       discordSettings: record.discordSettings||{},
       adminPassword: record.adminPassword||ADMIN_PASSWORD
@@ -1317,15 +1368,181 @@ function switchMedia(productId, idx){
 }
 
 /* ===== REVIEWS ===== */
+function getAllReviews(){
+  // Merge static defaults + DB user reviews (approved only for public)
+  const dbReviews=(state.dbData.reviews||[]).filter(r=>r.status==='approved');
+  // Map static REVIEWS to same shape
+  const staticMapped=REVIEWS.map((r,i)=>({
+    id:'static-'+i, name:r.name, avatar:r.avatar, stars:r.stars,
+    text:r.textAr, textEn:r.textEn, status:'approved',
+    createdAt:'2024-01-01', isStatic:true
+  }));
+  return [...dbReviews, ...staticMapped];
+}
+
+function renderReviewForm(){
+  const wrap=document.getElementById('review-form-wrap'); if(!wrap) return;
+  if(!state.currentUser){
+    wrap.innerHTML=`<div class="review-login-prompt">
+      <span style="font-size:28px">⭐</span>
+      <div>هل جربت منتجاتنا؟ <a onclick="openLoginModal()">سجّل دخولك</a> لكتابة تقييمك</div>
+    </div>`;
+    return;
+  }
+  // Check if user already has a pending/approved review
+  const existing=(state.dbData.reviews||[]).find(r=>r.userId===state.currentUser.id);
+  if(existing&&existing.status==='pending'){
+    wrap.innerHTML=`<div class="write-review-wrap" style="text-align:center;padding:22px">
+      <div style="font-size:36px;margin-bottom:10px">⏳</div>
+      <div class="write-review-title">تقييمك قيد المراجعة</div>
+      <div class="write-review-sub">سيظهر تقييمك بعد موافقة الإدارة. شكراً لك!</div>
+    </div>`;
+    return;
+  }
+  if(existing&&existing.status==='approved'){
+    wrap.innerHTML=`<div class="write-review-wrap" style="text-align:center;padding:22px">
+      <div style="font-size:36px;margin-bottom:10px">✅</div>
+      <div class="write-review-title">شكراً على تقييمك!</div>
+      <div class="write-review-sub" style="color:var(--neon-green)">${'★'.repeat(existing.stars)} — "${existing.text}"</div>
+    </div>`;
+    return;
+  }
+  wrap.innerHTML=`<div class="write-review-wrap">
+    <div class="write-review-title">✍️ اكتب تقييمك</div>
+    <div class="write-review-sub">شاركنا تجربتك — تقييمك يساعد عملاء آخرين</div>
+    <div style="margin-bottom:16px">
+      <div style="font-size:12px;font-weight:700;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">التقييم</div>
+      <div class="star-picker" id="star-picker">
+        <input type="radio" name="stars" id="s5" value="5"><label for="s5" title="5 نجوم">★</label>
+        <input type="radio" name="stars" id="s4" value="4"><label for="s4" title="4 نجوم">★</label>
+        <input type="radio" name="stars" id="s3" value="3"><label for="s3" title="3 نجوم">★</label>
+        <input type="radio" name="stars" id="s2" value="2"><label for="s2" title="نجمتان">★</label>
+        <input type="radio" name="stars" id="s1" value="1"><label for="s1" title="نجمة">★</label>
+      </div>
+    </div>
+    <div class="form-group">
+      <textarea class="form-input" id="review-text-input" placeholder="اكتب تجربتك مع المتجر هنا..." rows="3" style="resize:vertical"></textarea>
+    </div>
+    <button class="review-submit-btn" onclick="submitReview()">إرسال التقييم ⭐</button>
+    <div id="review-submit-status" style="margin-top:10px;font-size:13px"></div>
+  </div>`;
+}
+
 function renderReviews(){
+  renderReviewForm();
   const grid=document.getElementById('reviews-grid'); if(!grid) return;
-  const isEn=state.lang==='en';
-  grid.innerHTML=REVIEWS.map(r=>`
+  const all=getAllReviews();
+  if(!all.length){
+    grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text-muted)"><div style="font-size:48px;opacity:.3;margin-bottom:14px">⭐</div><div>لا توجد تقييمات بعد — كن أول من يقيّم!</div></div>`;
+    return;
+  }
+  grid.innerHTML=all.map(r=>`
     <div class="review-card">
-      <div class="review-header"><div class="review-avatar">${r.avatar}</div><div><div class="review-name">${r.name}</div><div class="review-date">عميل موثق ✓</div></div></div>
+      <div class="review-header">
+        <div class="review-avatar">${r.avatar||r.name.charAt(0).toUpperCase()}</div>
+        <div><div class="review-name">${r.name}</div><div class="review-date">${r.isStatic?'عميل موثق ✓':new Date(r.createdAt).toLocaleDateString('ar-SA',{year:'numeric',month:'short',day:'numeric'})}</div></div>
+      </div>
       <div class="review-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
-      <div class="review-text">${isEn?r.textEn:r.textAr}</div>
+      <div class="review-text">${r.text||r.textAr||''}</div>
     </div>`).join('');
+}
+
+async function submitReview(){
+  if(!state.currentUser){openLoginModal();return}
+  const starsEl=document.querySelector('input[name="stars"]:checked');
+  const text=(document.getElementById('review-text-input').value||'').trim();
+  const statusEl=document.getElementById('review-submit-status');
+
+  if(!starsEl){statusEl.innerHTML='<span style="color:var(--warning)">⚠️ اختر عدد النجوم أولاً</span>';return}
+  if(!text||text.length<10){statusEl.innerHTML='<span style="color:var(--warning)">⚠️ اكتب تقييماً لا يقل عن 10 أحرف</span>';return}
+
+  statusEl.innerHTML='<span style="color:var(--accent)">⏳ جاري الإرسال...</span>';
+
+  const review={
+    id: 'r-'+Date.now(),
+    userId: state.currentUser.id,
+    username: state.currentUser.username,
+    name: state.currentUser.name||state.currentUser.username,
+    avatar: state.currentUser.name.charAt(0).toUpperCase(),
+    stars: parseInt(starsEl.value),
+    text, textEn: text,
+    status: 'pending', // requires admin approval
+    createdAt: new Date().toISOString()
+  };
+
+  try{
+    await loadDB();
+    // Remove any existing review from this user first
+    state.dbData.reviews=(state.dbData.reviews||[]).filter(r=>r.userId!==state.currentUser.id);
+    state.dbData.reviews.push(review);
+    await saveDB();
+    statusEl.innerHTML='<span style="color:var(--neon-green)">✅ تم إرسال تقييمك! سيظهر بعد مراجعة الإدارة.</span>';
+    setTimeout(()=>renderReviewForm(),1500);
+  }catch(e){
+    statusEl.innerHTML='<span style="color:var(--danger)">✗ خطأ في الإرسال، حاول مجدداً</span>';
+  }
+}
+
+/* ===== REVIEWS ADMIN ===== */
+function renderAdminReviews(filter){
+  filter=filter||'all';
+  const container=document.getElementById('admin-reviews-list'); if(!container) return;
+  let reviews=state.dbData.reviews||[];
+  if(filter==='pending') reviews=reviews.filter(r=>r.status==='pending');
+  else if(filter==='approved') reviews=reviews.filter(r=>r.status==='approved');
+
+  if(!reviews.length){
+    container.innerHTML=`<div style="text-align:center;padding:40px;color:var(--text-dim)">لا توجد تقييمات ${filter==='pending'?'معلقة':filter==='approved'?'مقبولة':''}</div>`;
+    return;
+  }
+
+  container.innerHTML=[...reviews].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).map(r=>`
+    <div style="background:rgba(6,4,18,.6);border:1px solid ${r.status==='pending'?'rgba(245,158,11,.2)':'rgba(16,185,129,.15)'};border-radius:14px;padding:18px;display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap">
+      <div style="flex:1;min-width:200px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap">
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--primary-dark),var(--accent));display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:15px;flex-shrink:0">${r.avatar||r.name.charAt(0)}</div>
+          <div>
+            <div style="font-weight:700;color:var(--text);font-size:14px">${r.name} <span style="font-size:11px;color:var(--text-dim)">@${r.username}</span></div>
+            <div style="font-size:11px;color:var(--text-dim)">${new Date(r.createdAt).toLocaleDateString('ar-SA',{year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
+          </div>
+          <span style="padding:3px 10px;border-radius:5px;font-size:10px;font-weight:700;${r.status==='pending'?'background:rgba(245,158,11,.1);color:var(--warning);border:1px solid rgba(245,158,11,.2)':'background:rgba(16,185,129,.1);color:var(--neon-green);border:1px solid rgba(16,185,129,.2)'}">${r.status==='pending'?'⏳ معلق':'✅ مقبول'}</span>
+        </div>
+        <div style="color:var(--warning);font-size:14px;margin-bottom:6px;letter-spacing:2px">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.6">${r.text}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">
+        ${r.status==='pending'?`<button class="action-btn complete" onclick="approveReview('${r.id}')">✅ قبول</button>`:''}
+        ${r.status==='approved'?`<button class="action-btn" onclick="unapproveReview('${r.id}')" style="border-color:rgba(245,158,11,.3);color:var(--warning)">🔃 إلغاء القبول</button>`:''}
+        <button class="action-btn danger" onclick="deleteReview('${r.id}')">🗑️ حذف</button>
+      </div>
+    </div>`).join('');
+}
+
+function filterAdminReviews(filter, e){
+  document.querySelectorAll('#tab-reviews-admin .filter-tab').forEach(b=>b.classList.remove('active'));
+  if(e&&e.target) e.target.classList.add('active');
+  renderAdminReviews(filter);
+}
+
+async function approveReview(reviewId){
+  const r=state.dbData.reviews.find(x=>x.id===reviewId); if(!r) return;
+  r.status='approved'; r.approvedAt=new Date().toISOString();
+  try{await saveDB();renderAdminReviews('pending');showToast('✓ تم قبول التقييم','success')}
+  catch(e){showToast('خطأ','error')}
+}
+
+async function unapproveReview(reviewId){
+  const r=state.dbData.reviews.find(x=>x.id===reviewId); if(!r) return;
+  r.status='pending'; delete r.approvedAt;
+  try{await saveDB();renderAdminReviews('approved');showToast('تم إلغاء قبول التقييم','info')}
+  catch(e){showToast('خطأ','error')}
+}
+
+async function deleteReview(reviewId){
+  if(!confirm('هل تريد حذف هذا التقييم نهائياً؟')) return;
+  state.dbData.reviews=state.dbData.reviews.filter(r=>r.id!==reviewId);
+  try{await saveDB();renderAdminReviews('all');showToast('تم حذف التقييم','info')}
+  catch(e){showToast('خطأ','error')}
 }
 
 /* ===== CART ===== */
@@ -1531,135 +1748,89 @@ async function submitPaymentProof(orderId, proofUrl){
 function getDiscordCfg(){ return state.dbData.discordSettings||{} }
 
 async function sendWebhook(webhookUrl, payload){
-  if(!webhookUrl||!webhookUrl.startsWith('http')) return {ok:false, error:'رابط Webhook غير صالح'};
+  if(!webhookUrl) return {ok:false,error:'No webhook URL'};
   try{
     const r=await fetch(webhookUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-    return {ok:r.status===204||r.ok, status:r.status};
-  }catch(e){return {ok:false,error:e.message}}
+    return{ok:r.status===204||r.ok,status:r.status};
+  }catch(e){return{ok:false,error:e.message}}
 }
 
 async function sendDiscordDM(userId, message){
   const cfg=getDiscordCfg();
-  if(!cfg.botToken) return {ok:false, error:'Bot Token غير موجود'};
-  const proxy=(cfg.corsProxy||'https://corsproxy.io/?').replace(/\/?$/,'?');
-  const baseUrl='https://discord.com/api/v10';
+  if(!cfg.botToken) return{ok:false,error:'لا يوجد Bot Token'};
+  const proxy=(cfg.corsProxy||'https://corsproxy.io/?url=').replace(/\/+$/,'');
+  const base='https://discord.com/api/v10';
+  const headers={'Authorization':`Bot ${cfg.botToken}`,'Content-Type':'application/json'};
   try{
-    // Create DM channel
-    const chanR=await fetch(`${proxy}${encodeURIComponent(baseUrl+'/users/@me/channels')}`,{
-      method:'POST',
-      headers:{'Authorization':`Bot ${cfg.botToken}`,'Content-Type':'application/json','X-Requested-With':'XMLHttpRequest'},
-      body:JSON.stringify({recipient_id:String(userId)})
-    });
-    if(!chanR.ok){
-      let err=''; try{err=(await chanR.json()).message||chanR.status}catch(e){err=chanR.status}
-      return{ok:false,error:`فشل إنشاء DM: ${err}`}
-    }
-    const chan=await chanR.json();
-    const chanId=chan.id;
-    // Send message
-    const msgR=await fetch(`${proxy}${encodeURIComponent(baseUrl+'/channels/'+chanId+'/messages')}`,{
-      method:'POST',
-      headers:{'Authorization':`Bot ${cfg.botToken}`,'Content-Type':'application/json','X-Requested-With':'XMLHttpRequest'},
-      body:JSON.stringify({content:message})
-    });
-    if(!msgR.ok){
-      let err=''; try{err=(await msgR.json()).message||msgR.status}catch(e){err=msgR.status}
-      return{ok:false,error:`فشل إرسال الرسالة: ${err}`}
-    }
-    return {ok:true};
+    const ch=await fetch(`${proxy}${encodeURIComponent(base+'/users/@me/channels')}`,{method:'POST',headers,body:JSON.stringify({recipient_id:String(userId)})});
+    if(!ch.ok){let e='';try{e=(await ch.json()).message}catch(_){}return{ok:false,error:`فشل فتح DM: ${e||ch.status}`}}
+    const chan=await ch.json();
+    const msg=await fetch(`${proxy}${encodeURIComponent(base+'/channels/'+chan.id+'/messages')}`,{method:'POST',headers,body:JSON.stringify({content:message})});
+    if(!msg.ok){let e='';try{e=(await msg.json()).message}catch(_){}return{ok:false,error:`فشل إرسال الرسالة: ${e||msg.status}`}}
+    return{ok:true};
   }catch(e){return{ok:false,error:e.message}}
 }
 
 async function notifyStaffNewOrder(order){
   const cfg=getDiscordCfg();
   if(!cfg.staffWebhook) return;
-  const products=order.products.map(p=>`${p.nameAr} × ${p.qty}`).join('\n');
-  const payload={
-    username:'4E Store Bot',
-    avatar_url:'https://i.imgur.com/4e_store_icon.png',
-    embeds:[{
-      title:'🛒 طلب جديد وارد!',
-      color:0x8B5CF6,
-      fields:[
-        {name:'رقم الطلب',value:`\`${order.id}\``,inline:true},
-        {name:'العميل',value:order.customerName||order.username,inline:true},
-        {name:'Discord',value:order.discord||'—',inline:true},
-        {name:'المنتجات',value:products||'—'},
-        {name:'الإجمالي',value:`**${order.total} ر.س**`,inline:true},
-        {name:'الحالة',value:'⏳ معلق',inline:true},
-        {name:'الملاحظات',value:order.notes||'—'},
-      ],
-      timestamp:new Date().toISOString(),
-      footer:{text:'4E Store • نظام الطلبات'}
-    }]
-  };
-  const r=await sendWebhook(cfg.staffWebhook, payload);
-  if(r.ok) addBotLog(`✓ أُرسل إشعار طلب ${order.id} للستاف`,'success');
-  else addBotLog(`✗ فشل إرسال إشعار الستاف: ${r.error||r.status}`,'error');
-}
-
-async function notifyCustomerOrderReceived(order){
-  const cfg=getDiscordCfg();
-  const products=order.products.map(p=>`• ${p.nameAr} × ${p.qty} — ${p.price*p.qty} ر.س`).join('\n');
-  const msg=`🛒 **تم استلام طلبك في 4E Store!**\n\n📦 **رقم الطلب:** \`${order.id}\`\n\n**المنتجات:**\n${products}\n\n💰 **الإجمالي:** ${order.total} ر.س\n\n⏳ سنراجع طلبك ونُرسل لك رابط الدفع قريباً. شكراً لتسوقك معنا! 💜`;
-
-  let dmSent=false;
-  if(cfg.botToken && order.discordId){
-    const r=await sendDiscordDM(order.discordId, msg);
-    if(r.ok){dmSent=true;addBotLog(`✓ DM أُرسل للعميل (ID: ${order.discordId})`,'success')}
-    else addBotLog(`✗ فشل DM للعميل: ${r.error}`,'error');
-  }
-  // Fallback: customer webhook
-  if(!dmSent && cfg.customerWebhook){
-    const payload={content:`<@${order.discordId||order.discord}>\n${msg}`,username:'4E Store Bot'};
-    const r=await sendWebhook(cfg.customerWebhook,payload);
-    if(r.ok) addBotLog(`✓ إشعار العميل أُرسل عبر webhook`,'success');
-    else addBotLog(`✗ فشل webhook العميل: ${r.error}`,'error');
-  }
+  const products=(order.products||[]).map(p=>`${p.nameAr} × ${p.qty}`).join('\n');
+  const r=await sendWebhook(cfg.staffWebhook,{username:'4E Store Bot',embeds:[{title:'🛒 طلب جديد وارد!',color:0x8B5CF6,fields:[{name:'رقم الطلب',value:`\`${order.id}\``,inline:true},{name:'العميل',value:order.customerName||order.username,inline:true},{name:'Discord',value:order.discord||'—',inline:true},{name:'المنتجات',value:products||'—'},{name:'الإجمالي',value:`**${order.total} ر.س**`,inline:true},{name:'الملاحظات',value:order.notes||'—'}],timestamp:new Date().toISOString(),footer:{text:'4E Store'}}]});
+  if(r.ok) addBotLog(`✓ إشعار الطلب ${order.id} أُرسل للستاف`,'success');
+  else addBotLog(`✗ فشل إشعار الستاف: ${r.error||r.status}`,'error');
 }
 
 async function notifyCustomerPayLink(order, payLink){
   const cfg=getDiscordCfg();
-  const msg=`💳 **رابط الدفع لطلبك جاهز!** \n\n📦 **رقم الطلب:** \`${order.id}\`\n💰 **المبلغ:** ${order.total} ر.س\n\n🔗 **رابط الدفع:**\n${payLink}\n\n✅ بعد الدفع سيتم إتمام طلبك فوراً. شكراً! 💜`;
-
-  let dmSent=false;
-  if(cfg.botToken && order.discordId){
-    const r=await sendDiscordDM(order.discordId, msg);
-    if(r.ok){dmSent=true;addBotLog(`✓ رابط الدفع أُرسل عبر DM لـ ${order.discord}`,'success')}
-    else addBotLog(`✗ فشل DM رابط الدفع: ${r.error}`,'error');
+  const msg=`💳 **رابط الدفع لطلبك جاهز!**\n\n📦 **رقم الطلب:** \`${order.id}\`\n💰 **المبلغ:** ${order.total} ر.س\n\n🔗 **رابط الدفع:**\n${payLink}\n\n✅ بعد الدفع سيتم إتمام طلبك فوراً. شكراً! 💜`;
+  let sent=false;
+  if(cfg.botToken&&order.discordId){
+    const r=await sendDiscordDM(order.discordId,msg);
+    if(r.ok){sent=true;addBotLog(`✓ رابط الدفع أُرسل عبر DM لـ ${order.discord}`,'success')}
+    else addBotLog(`✗ فشل DM: ${r.error}`,'error');
   }
-  if(!dmSent && cfg.customerWebhook){
-    const payload={content:`<@${order.discordId||order.discord}>\n${msg}`,username:'4E Store Bot'};
-    const r=await sendWebhook(cfg.customerWebhook,payload);
-    if(r.ok) addBotLog(`✓ رابط الدفع أُرسل عبر webhook للعميل`,'success');
-    else addBotLog(`✗ فشل webhook رابط الدفع: ${r.error}`,'error');
+  if(!sent&&cfg.customerWebhook){
+    const r=await sendWebhook(cfg.customerWebhook,{content:`${order.discordId?`<@${order.discordId}>`:`**@${order.discord}**`}\n${msg}`,username:'4E Store Bot'});
+    if(r.ok){sent=true;addBotLog(`✓ رابط الدفع أُرسل عبر webhook`,'success')}
+    else addBotLog(`✗ فشل webhook: ${r.error}`,'error');
   }
-
-  // Notify staff too
   if(cfg.staffWebhook){
-    const staffPayload={username:'4E Store Bot',embeds:[{title:'💳 تم إرسال رابط الدفع للعميل',color:0x10B981,fields:[{name:'الطلب',value:`\`${order.id}\``,inline:true},{name:'العميل',value:order.discord||order.username,inline:true},{name:'المبلغ',value:`${order.total} ر.س`,inline:true},{name:'الرابط',value:payLink}],timestamp:new Date().toISOString(),footer:{text:'4E Store'}}]};
-    await sendWebhook(cfg.staffWebhook,staffPayload);
+    await sendWebhook(cfg.staffWebhook,{username:'4E Store Bot',embeds:[{title:'💳 تم إرسال رابط الدفع للعميل',color:0x10B981,fields:[{name:'الطلب',value:`\`${order.id}\``,inline:true},{name:'العميل',value:order.discord||order.username,inline:true},{name:'المبلغ',value:`${order.total} ر.س`,inline:true},{name:'الرابط',value:payLink}],timestamp:new Date().toISOString()}]});
   }
+  return sent;
 }
 
 async function notifyOrderStatusChanged(order, newStatus){
   const cfg=getDiscordCfg();
-  const statusMap={processing:'🔄 طلبك قيد التنفيذ الآن!',completed:'✅ تم إتمام طلبك بنجاح!',cancelled:'❌ تم إلغاء طلبك'};
-  const msg=`${statusMap[newStatus]||'📦 تحديث على طلبك'}\n\n📦 **رقم الطلب:** \`${order.id}\`\n💰 **المجموع:** ${order.total} ر.س\n\n شكراً لتسوقك في **4E Store** 💜`;
-
-  let dmSent=false;
-  if(cfg.botToken && order.discordId){
-    const r=await sendDiscordDM(order.discordId, msg);
-    if(r.ok){dmSent=true;addBotLog(`✓ إشعار تحديث الحالة أُرسل لـ ${order.discord}`,'success')}
+  const labels={processing:'🔄 طلبك قيد التنفيذ الآن!',completed:'✅ تم إتمام طلبك بنجاح!',cancelled:'❌ تم إلغاء طلبك'};
+  const msg=`${labels[newStatus]||'📦 تحديث على طلبك'}\n\n📦 **رقم الطلب:** \`${order.id}\`\n💰 **المجموع:** ${order.total} ر.س\n\nشكراً لتسوقك في **4E Store** 💜`;
+  let sent=false;
+  if(cfg.botToken&&order.discordId){
+    const r=await sendDiscordDM(order.discordId,msg);
+    if(r.ok){sent=true;addBotLog(`✓ إشعار تحديث الحالة أُرسل لـ ${order.discord}`,'success')}
     else addBotLog(`✗ فشل DM تحديث الحالة: ${r.error}`,'error');
   }
-  if(!dmSent && cfg.customerWebhook){
-    await sendWebhook(cfg.customerWebhook,{content:`<@${order.discordId||order.discord}>\n${msg}`,username:'4E Store Bot'});
+  if(!sent&&cfg.customerWebhook){
+    await sendWebhook(cfg.customerWebhook,{content:`${order.discordId?`<@${order.discordId}>`:`**@${order.discord}**`}\n${msg}`,username:'4E Store Bot'});
   }
   if(cfg.staffWebhook){
-    const colMap={processing:0x06B6D4,completed:0x10B981,cancelled:0xEF4444};
-    await sendWebhook(cfg.staffWebhook,{username:'4E Store Bot',embeds:[{title:`تحديث حالة الطلب ${order.id}`,color:colMap[newStatus]||0x8B5CF6,fields:[{name:'العميل',value:order.discord||order.username,inline:true},{name:'الحالة الجديدة',value:newStatus,inline:true},{name:'المجموع',value:`${order.total} ر.س`,inline:true}],timestamp:new Date().toISOString()}]});
+    const cols={processing:0x06B6D4,completed:0x10B981,cancelled:0xEF4444};
+    await sendWebhook(cfg.staffWebhook,{username:'4E Store Bot',embeds:[{title:`تحديث حالة الطلب ${order.id}`,color:cols[newStatus]||0x8B5CF6,fields:[{name:'العميل',value:order.discord||order.username,inline:true},{name:'الحالة',value:newStatus,inline:true}],timestamp:new Date().toISOString()}]});
   }
+}
+
+async function submitPaymentProof(orderId, proofUrl){
+  try{
+    await loadDB();
+    const order=state.dbData.orders.find(o=>o.id===orderId); if(!order) return false;
+    order.paymentProof=proofUrl; order.proofSubmittedAt=new Date().toISOString();
+    await saveDB();
+    const cfg=getDiscordCfg();
+    if(cfg.staffWebhook){
+      await sendWebhook(cfg.staffWebhook,{username:'4E Store Bot',embeds:[{title:'💳 عميل أرسل إثبات الدفع',color:0xA78BFA,fields:[{name:'الطلب',value:`\`${orderId}\``,inline:true},{name:'العميل',value:order.discord||order.username,inline:true},{name:'المبلغ',value:`${order.total} ر.س`,inline:true},{name:'رابط الإثبات',value:proofUrl}],timestamp:new Date().toISOString(),footer:{text:'4E Store'}}]});
+    }
+    return true;
+  }catch(e){return false}
 }
 
 /* ===== DISCORD SETTINGS UI ===== */
@@ -1667,9 +1838,9 @@ async function testStaffWebhook(){
   const url=document.getElementById('staff-webhook').value.trim();
   const st=document.getElementById('staff-webhook-status');
   st.innerHTML='<span class="ds-status testing">⏳ جاري الاختبار...</span>';
-  const r=await sendWebhook(url,{username:'4E Store Bot',content:'✅ اختبار Webhook الستاف — يعمل بشكل صحيح! 🎉'});
-  if(r.ok){st.innerHTML='<span class="ds-status ok">✓ يعمل بنجاح!</span>';addBotLog('✓ Staff webhook اختبار ناجح','success')}
-  else{st.innerHTML='<span class="ds-status fail">✗ فشل الاتصال</span>';addBotLog(`✗ Staff webhook فشل: ${r.error||r.status}`,'error')}
+  const r=await sendWebhook(url,{username:'4E Store Bot',content:'✅ اختبار Webhook الستاف — يعمل! 🎉'});
+  if(r.ok){st.innerHTML='<span class="ds-status ok">✓ يعمل!</span>';addBotLog('✓ Staff webhook ناجح','success')}
+  else{st.innerHTML='<span class="ds-status fail">✗ فشل</span>';addBotLog(`✗ Staff webhook فشل: ${r.error||r.status}`,'error')}
 }
 
 async function testCustomerWebhook(){
@@ -1677,30 +1848,40 @@ async function testCustomerWebhook(){
   const st=document.getElementById('customer-webhook-status');
   st.innerHTML='<span class="ds-status testing">⏳ جاري الاختبار...</span>';
   const r=await sendWebhook(url,{username:'4E Store Bot',content:'✅ اختبار Webhook العملاء — يعمل! 🎉'});
-  if(r.ok){st.innerHTML='<span class="ds-status ok">✓ يعمل بنجاح!</span>';addBotLog('✓ Customer webhook اختبار ناجح','success')}
-  else{st.innerHTML='<span class="ds-status fail">✗ فشل الاتصال</span>';addBotLog(`✗ Customer webhook فشل: ${r.error||r.status}`,'error')}
+  if(r.ok){st.innerHTML='<span class="ds-status ok">✓ يعمل!</span>';addBotLog('✓ Customer webhook ناجح','success')}
+  else{st.innerHTML='<span class="ds-status fail">✗ فشل</span>';addBotLog(`✗ Customer webhook فشل: ${r.error||r.status}`,'error')}
+}
+
+async function testDM(){
+  const st=document.getElementById('dm-test-status');
+  const testId=document.getElementById('dm-test-id').value.trim();
+  if(!testId){st.innerHTML='<span class="ds-status fail">✗ أدخل Discord User ID</span>';return}
+  st.innerHTML='<span class="ds-status testing">⏳ جاري الإرسال...</span>';
+  const r=await sendDiscordDM(testId,'✅ اختبار DM من 4E Store Bot — يعمل! 🎉');
+  if(r.ok){st.innerHTML='<span class="ds-status ok">✓ وصل DM بنجاح!</span>';addBotLog(`✓ DM اختبار وصل لـ ID: ${testId}`,'success')}
+  else{st.innerHTML=`<span class="ds-status fail">✗ ${r.error}</span>`;addBotLog(`✗ DM فشل: ${r.error}`,'error')}
 }
 
 async function saveDiscordSettings(){
   const cfg={
-    staffWebhook: document.getElementById('staff-webhook').value.trim(),
-    botToken: document.getElementById('bot-token').value.trim(),
-    customerWebhook: document.getElementById('customer-webhook').value.trim(),
-    corsProxy: document.getElementById('cors-proxy').value.trim()||'https://corsproxy.io/?'
+    botToken:       (document.getElementById('bot-token').value||'').trim(),
+    corsProxy:      (document.getElementById('cors-proxy').value||'https://corsproxy.io/?url=').trim(),
+    staffWebhook:   (document.getElementById('staff-webhook').value||'').trim(),
+    customerWebhook:(document.getElementById('customer-webhook').value||'').trim(),
   };
   state.dbData.discordSettings=cfg;
   setSyncBadge('syncing');
-  try{await saveDB();showToast('✓ تم حفظ إعدادات Discord','success');addBotLog('✓ إعدادات Discord محفوظة','success')}
+  try{await saveDB();showToast('✓ تم حفظ إعدادات Discord','success');addBotLog('✓ إعدادات محفوظة','success')}
   catch(e){showToast('خطأ في الحفظ','error')}
 }
 
 function loadDiscordSettingsUI(){
   const cfg=state.dbData.discordSettings||{};
   const f=id=>document.getElementById(id);
-  if(f('staff-webhook')) f('staff-webhook').value=cfg.staffWebhook||'';
-  if(f('bot-token')) f('bot-token').value=cfg.botToken||'';
+  if(f('bot-token'))        f('bot-token').value=cfg.botToken||'';
+  if(f('cors-proxy'))       f('cors-proxy').value=cfg.corsProxy||'https://corsproxy.io/?url=';
+  if(f('staff-webhook'))    f('staff-webhook').value=cfg.staffWebhook||'';
   if(f('customer-webhook')) f('customer-webhook').value=cfg.customerWebhook||'';
-  if(f('cors-proxy')) f('cors-proxy').value=cfg.corsProxy||'https://corsproxy.io/?';
 }
 
 /* ===== ADMIN ===== */
@@ -1740,7 +1921,7 @@ async function showAdminPanel(){
   setSyncBadge('syncing');
   await loadDB();
   renderAdminStats(); renderOrdersTable(state.dbData.orders);
-  renderProductManager(); renderCategoryManager(); loadHomepageEditorValues(); loadDiscordSettingsUI();
+  renderProductManager(); renderCategoryManager(); renderAdminReviews('all'); loadHomepageEditorValues(); loadDiscordSettingsUI();
   loadChangePasswordUI();
   showToast('✓ مرحباً kyra 👑','success');
 }
@@ -1767,7 +1948,7 @@ function renderAdminStats(){
     <div class="admin-stat-card"><div class="admin-stat-icon green">✅</div><div><div class="admin-stat-num">${orders.filter(o=>o.status==='completed').length}</div><div class="admin-stat-label">مكتملة</div></div></div>
     <div class="admin-stat-card"><div class="admin-stat-icon cyan">💰</div><div><div class="admin-stat-num">${total}</div><div class="admin-stat-label">إجمالي ر.س</div></div></div>
     <div class="admin-stat-card"><div class="admin-stat-icon purple">🏷️</div><div><div class="admin-stat-num">${getProducts().length}</div><div class="admin-stat-label">منتجات</div></div></div>
-    <div class="admin-stat-card"><div class="admin-stat-icon cyan">👥</div><div><div class="admin-stat-num">${(state.dbData.users||[]).length}</div><div class="admin-stat-label">مستخدمين</div></div></div>`;
+    <div class="admin-stat-card"><div class="admin-stat-icon yellow">⭐</div><div><div class="admin-stat-num">${(state.dbData.reviews||[]).filter(r=>r.status==='pending').length}</div><div class="admin-stat-label">تقييمات معلقة</div></div></div>`;
 }
 
 function filterOrders(filter,e){
