@@ -529,6 +529,42 @@ footer::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;
 
 body.ltr{direction:ltr}
 body.ltr .orders-table th{text-align:left}
+
+/* ---- FLOATING DISCORD BTN ---- */
+.discord-float{position:fixed;bottom:30px;left:30px;z-index:9999;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#5865F2,#7289DA);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(88,101,242,.5),0 0 0 0 rgba(88,101,242,.4);animation:discordPulse 2.5s infinite;transition:transform .25s,box-shadow .25s;text-decoration:none}
+.discord-float:hover{transform:scale(1.12) translateY(-3px);box-shadow:0 8px 35px rgba(88,101,242,.7),0 0 0 8px rgba(88,101,242,.1)}
+.discord-float svg{width:32px;height:32px;fill:#fff}
+.discord-float-tooltip{position:absolute;bottom:72px;left:50%;transform:translateX(-50%);background:rgba(10,8,22,.95);border:1px solid rgba(88,101,242,.4);color:#fff;font-size:12px;font-weight:700;padding:6px 14px;border-radius:8px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;font-family:'Cairo',sans-serif}
+.discord-float:hover .discord-float-tooltip{opacity:1}
+@keyframes discordPulse{0%{box-shadow:0 4px 20px rgba(88,101,242,.5),0 0 0 0 rgba(88,101,242,.4)}70%{box-shadow:0 4px 20px rgba(88,101,242,.5),0 0 0 12px rgba(88,101,242,0)}100%{box-shadow:0 4px 20px rgba(88,101,242,.5),0 0 0 0 rgba(88,101,242,0)}}
+
+/* ---- COUPON ---- */
+.coupon-row{display:flex;gap:8px;margin:14px 0;align-items:center}
+.coupon-input{flex:1;padding:9px 14px;border-radius:9px;background:rgba(6,4,18,.7);border:1px solid rgba(139,92,246,.25);color:var(--text);font-size:13px;font-family:'Cairo',sans-serif;outline:none;transition:border-color .2s}
+.coupon-input:focus{border-color:var(--primary)}
+.coupon-input::placeholder{color:var(--text-dim)}
+.coupon-btn{padding:9px 16px;border-radius:9px;background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);color:var(--primary-bright);font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;white-space:nowrap;transition:all .2s}
+.coupon-btn:hover{background:rgba(139,92,246,.3)}
+.coupon-status{font-size:12px;margin-top:4px;min-height:18px}
+.coupon-discount-line{display:flex;justify-content:space-between;font-size:13px;color:var(--neon-green);margin:4px 0;padding:4px 0;border-bottom:1px solid rgba(16,185,129,.1)}
+
+/* ---- ORDER HISTORY TABS ---- */
+.myorders-tabs{display:flex;gap:8px;margin-bottom:28px;flex-wrap:wrap}
+.myorders-tab{padding:8px 20px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--text-muted);font-size:13px;font-weight:600;cursor:pointer;transition:all .25s;font-family:'Cairo',sans-serif}
+.myorders-tab.active{border-color:var(--primary);color:var(--primary-bright);background:rgba(139,92,246,.12);box-shadow:0 0 15px rgba(139,92,246,.2)}
+.license-key-box{background:rgba(6,4,18,.8);border:1px solid rgba(139,92,246,.2);border-radius:10px;padding:14px 16px;margin-top:10px;font-family:monospace;font-size:13px;color:var(--primary-bright);letter-spacing:1px;word-break:break-all;position:relative}
+.license-key-copy{position:absolute;top:8px;right:8px;padding:4px 10px;border-radius:6px;background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.25);color:var(--primary-bright);font-size:11px;cursor:pointer;font-family:'Cairo',sans-serif;transition:all .2s}
+.license-key-copy:hover{background:rgba(139,92,246,.3)}
+.download-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;border-radius:9px;background:linear-gradient(135deg,rgba(6,182,212,.15),rgba(139,92,246,.15));border:1px solid rgba(6,182,212,.3);color:var(--accent);font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;text-decoration:none;transition:all .25s;margin-top:10px}
+.download-btn:hover{background:linear-gradient(135deg,rgba(6,182,212,.3),rgba(139,92,246,.3));border-color:var(--accent);transform:translateY(-1px)}
+.delivered-content-box{background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);border-radius:12px;padding:16px;margin-top:12px}
+.delivered-content-label{font-size:11px;color:var(--neon-green);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+.delivered-content-text{font-size:13px;color:var(--text-muted);line-height:1.8;white-space:pre-wrap;font-family:monospace}
+
+/* ---- DISCORD ROLE SECTION ---- */
+.discord-role-section{background:rgba(88,101,242,.07);border:1px solid rgba(88,101,242,.2);border-radius:12px;padding:18px;margin-top:12px}
+.discord-role-label{font-size:13px;font-weight:700;color:#7289DA;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+
 @media(max-width:768px){
   #navbar{padding:0 16px;gap:10px}
   .nav-links{display:none}
@@ -563,6 +599,12 @@ body.ltr .orders-table th{text-align:left}
 <div class="corner-deco br"></div>
 <div id="overlay" onclick="closeAll()"></div>
 <div id="toast-container"></div>
+
+<!-- FLOATING DISCORD BUTTON -->
+<a id="discord-float-btn" class="discord-float" href="https://discord.gg/YOUR_INVITE" target="_blank" rel="noopener" title="انضم لسيرفر Discord">
+  <svg viewBox="0 0 127.14 96.36" xmlns="http://www.w3.org/2000/svg"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg>
+  <span class="discord-float-tooltip">انضم لسيرفر Discord 🎮</span>
+</a>
 
 <!-- NAVBAR -->
 <nav id="navbar">
@@ -674,14 +716,40 @@ body.ltr .orders-table th{text-align:left}
       <div class="myorders-header">
         <div>
           <div class="section-label">حسابي</div>
-          <div class="myorders-title">📦 طلباتي</div>
+          <div class="myorders-title">📦 طلباتي ومشترياتي</div>
         </div>
         <button class="nav-btn ghost" onclick="loadMyOrders()" style="font-size:13px">🔄 تحديث</button>
       </div>
-      <div id="myorders-container">
-        <div class="myorders-empty">
-          <div class="myorders-empty-icon">📦</div>
-          <div class="myorders-empty-text">جاري التحميل...</div>
+      <div class="myorders-tabs">
+        <button class="myorders-tab active" onclick="switchMyOrdersTab('orders',this)">📦 سجل الطلبات</button>
+        <button class="myorders-tab" onclick="switchMyOrdersTab('downloads',this)">⬇️ ملفاتي المُسلَّمة</button>
+        <button class="myorders-tab" onclick="switchMyOrdersTab('licenses',this)">🔑 مفاتيح الترخيص</button>
+      </div>
+      <!-- Orders Tab -->
+      <div id="myorders-tab-orders">
+        <div id="myorders-container">
+          <div class="myorders-empty">
+            <div class="myorders-empty-icon">📦</div>
+            <div class="myorders-empty-text">جاري التحميل...</div>
+          </div>
+        </div>
+      </div>
+      <!-- Downloads Tab -->
+      <div id="myorders-tab-downloads" style="display:none">
+        <div id="mydownloads-container">
+          <div class="myorders-empty">
+            <div class="myorders-empty-icon">⬇️</div>
+            <div class="myorders-empty-text">لا توجد ملفات مُسلَّمة بعد</div>
+          </div>
+        </div>
+      </div>
+      <!-- License Keys Tab -->
+      <div id="myorders-tab-licenses" style="display:none">
+        <div id="mylicenses-container">
+          <div class="myorders-empty">
+            <div class="myorders-empty-icon">🔑</div>
+            <div class="myorders-empty-text">لا توجد مفاتيح ترخيص بعد</div>
+          </div>
         </div>
       </div>
     </section>
@@ -864,9 +932,51 @@ body.ltr .orders-table th{text-align:left}
           <div class="form-hint" style="margin-top:6px">للحصول على User ID: Discord → Settings → Advanced → فعّل Developer Mode → انقر يمين على اسمك → Copy User ID</div>
         </div>
 
+        <div class="ds-section" style="border-color:rgba(88,101,242,.3)">
+          <div class="ds-section-label" style="color:#7289DA">🎭 تعيين رول تلقائي بعد الشراء <span class="ds-badge optional">Auto Role</span></div>
+          <div class="form-hint" style="margin-bottom:10px">بعد إتمام الطلب يُعيَّن الرول تلقائياً للعميل على السيرفر. يتطلب البوت أن يكون في السيرفر مع صلاحية Manage Roles</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div class="form-group" style="margin-bottom:0">
+              <label class="form-label">Server (Guild) ID</label>
+              <input class="form-input" type="text" id="discord-guild-id" placeholder="مثال: 1234567890123456789" style="font-family:monospace">
+              <div class="form-hint">في Discord → السيرفر → Copy Server ID (Developer Mode)</div>
+            </div>
+            <div class="form-group" style="margin-bottom:0">
+              <label class="form-label">Role ID (رول المشتري)</label>
+              <input class="form-input" type="text" id="discord-role-id" placeholder="مثال: 9876543210987654321" style="font-family:monospace">
+              <div class="form-hint">انقر يمين على الرول → Copy Role ID</div>
+            </div>
+          </div>
+          <div class="form-hint" style="color:var(--warning);margin-top:10px">⚠️ تأكد أن رتبة البوت في السيرفر أعلى من الرول المراد تعيينه</div>
+        </div>
+
+        <div class="ds-section" style="border-color:rgba(88,101,242,.3)">
+          <div class="ds-section-label" style="color:#7289DA">🔗 رابط دعوة السيرفر (زر Discord العائم)</div>
+          <div class="form-hint" style="margin-bottom:10px">الرابط الذي يفتح عند الضغط على زر Discord العائم في الموقع</div>
+          <input class="form-input" type="url" id="discord-invite-link" placeholder="https://discord.gg/XXXXXXXX">
+          <button class="ds-test-btn" onclick="saveDiscordInviteLink()" style="margin-top:8px">💾 حفظ الرابط</button>
+        </div>
+
         <div class="ds-section">
           <div class="ds-section-label">📋 سجل أحداث البوت</div>
           <div class="bot-log" id="bot-log"><div class="bot-log-entry info">[ انتظار الأحداث... ]</div></div>
+        </div>
+
+        <div class="ds-section" style="background:rgba(88,101,242,.04);border-color:rgba(88,101,242,.2)">
+          <div class="ds-section-label" style="color:#7289DA">📖 كيفية تفعيل Discord DMs (مجاناً وبسهولة)</div>
+          <div style="font-size:13px;color:var(--text-muted);line-height:2">
+            <div style="margin-bottom:8px"><strong style="color:#7289DA">الطريقة الأسهل — Webhook (مجاني 100%) ✅</strong></div>
+            <div>1️⃣ في Discord → السيرفر → الغرفة المطلوبة → Edit Channel</div>
+            <div>2️⃣ Integrations → Webhooks → Create Webhook</div>
+            <div>3️⃣ انسخ URL والصقه في حقل Staff/Customer Webhook أعلاه</div>
+            <div>4️⃣ الرسائل تُرسل للغرفة مباشرة بدون Bot!</div>
+            <div style="margin-top:10px"><strong style="color:#7289DA">للـ DM المباشر (يتطلب Bot) ✅</strong></div>
+            <div>1️⃣ discord.com/developers → New Application → Bot → Reset Token</div>
+            <div>2️⃣ فعّل: Message Content Intent + Server Members Intent + Presence Intent</div>
+            <div>3️⃣ الصق Token في حقل Bot Token أعلاه</div>
+            <div>4️⃣ استخدم <code style="background:rgba(139,92,246,.15);padding:2px 8px;border-radius:5px">corsproxy.io</code> كـ CORS Proxy (مجاني)</div>
+            <div style="margin-top:10px;padding:10px;background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.2);border-radius:8px;color:var(--neon-green)">💡 نصيحة: ابدأ بالـ Webhook (أسهل وأسرع) ثم أضف Bot Token للـ DM المباشر لاحقاً</div>
+          </div>
         </div>
 
         <button class="ds-save-btn" onclick="saveDiscordSettings()">💾 حفظ إعدادات Discord</button>
@@ -931,9 +1041,22 @@ body.ltr .orders-table th{text-align:left}
   </div>
   <div class="cart-items" id="cart-items-list"></div>
   <div class="cart-footer" id="cart-footer">
+    <div class="coupon-row">
+      <input class="coupon-input" type="text" id="coupon-input" placeholder="كود الخصم / Coupon Code" autocomplete="off">
+      <button class="coupon-btn" onclick="applyCoupon()">تطبيق</button>
+    </div>
+    <div class="coupon-status" id="coupon-status"></div>
     <div class="cart-total-row">
       <span class="cart-total-label">الإجمالي</span>
-      <span class="cart-total-amount"><span id="cart-total">0</span> ر.س</span>
+      <span class="cart-total-amount"><span id="cart-total">0</span> $</span>
+    </div>
+    <div id="cart-discount-line" style="display:none" class="coupon-discount-line">
+      <span>🎟️ خصم (<span id="cart-coupon-code-display"></span>)</span>
+      <span>-<span id="cart-discount-amount">0</span>$</span>
+    </div>
+    <div id="cart-final-row" style="display:none" class="cart-total-row">
+      <span class="cart-total-label" style="color:var(--neon-green);font-size:14px">الإجمالي بعد الخصم</span>
+      <span class="cart-total-amount" style="color:var(--neon-green)"><span id="cart-final-total">0</span> $</span>
     </div>
     <button class="checkout-btn" onclick="startCheckout()">إتمام الطلب ←</button>
   </div>
@@ -1021,8 +1144,8 @@ body.ltr .orders-table th{text-align:left}
   <div class="form-group"><label class="form-label">الوصف (عربي)</label><textarea class="form-input" id="pe-desc-ar" placeholder="وصف تفصيلي للمنتج" rows="3" style="resize:vertical"></textarea></div>
   <div class="form-group"><label class="form-label">الوصف (إنجليزي)</label><textarea class="form-input" id="pe-desc-en" placeholder="Detailed product description" rows="2" style="resize:vertical"></textarea></div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-    <div class="form-group"><label class="form-label">السعر (ر.س)</label><input class="form-input" type="number" id="pe-price" placeholder="30"></div>
-    <div class="form-group"><label class="form-label">السعر الأصلي (ر.س)</label><input class="form-input" type="number" id="pe-original-price" placeholder="50"></div>
+    <div class="form-group"><label class="form-label">السعر ($)</label><input class="form-input" type="number" id="pe-price" placeholder="30"></div>
+    <div class="form-group"><label class="form-label">السعر الأصلي ($)</label><input class="form-input" type="number" id="pe-original-price" placeholder="50"></div>
   </div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
     <div class="form-group"><label class="form-label">الفئة</label><select class="form-input" id="pe-cat"></select></div>
@@ -1079,9 +1202,19 @@ body.ltr .orders-table th{text-align:left}
   <div class="modal-header"><div class="modal-icon" style="background:rgba(16,185,129,.1);border-color:rgba(16,185,129,.3)">📦</div><div><div class="modal-title">تسليم الطلب للعميل</div><div class="modal-sub">أرسل محتوى الطلب مباشرة عبر Discord</div></div></div>
   <div class="delivery-info-box" id="delivery-order-info"></div>
   <div class="form-group">
-    <label class="form-label">📦 محتوى الطلب (يُرسل للعميل)</label>
-    <textarea class="form-input" id="delivery-content" placeholder="مثال:&#10;✅ Xbox Game Pass — كود التفعيل: XXXXX-XXXXX-XXXXX&#10;&#10;طريقة التفعيل: اذهب إلى xbox.com/redeem وأدخل الكود..." rows="6" style="resize:vertical;font-family:monospace;font-size:13px"></textarea>
+    <label class="form-label">📦 محتوى الطلب / نص التسليم</label>
+    <textarea class="form-input" id="delivery-content" placeholder="مثال:&#10;✅ Xbox Game Pass — كود التفعيل: XXXXX-XXXXX-XXXXX&#10;&#10;طريقة التفعيل: اذهب إلى xbox.com/redeem وأدخل الكود..." rows="5" style="resize:vertical;font-family:monospace;font-size:13px"></textarea>
     <div class="form-hint">هذا النص سيُرسل مباشرة للعميل عبر Discord DM أو Webhook</div>
+  </div>
+  <div class="form-group">
+    <label class="form-label">🔑 مفتاح الترخيص / License Key (اختياري)</label>
+    <input class="form-input" type="text" id="delivery-license-key" placeholder="XXXXX-XXXXX-XXXXX-XXXXX" style="font-family:monospace;letter-spacing:1px">
+    <div class="form-hint">يظهر للعميل في صفحة "مفاتيح الترخيص" ويمكن نسخه بزر واحد</div>
+  </div>
+  <div class="form-group">
+    <label class="form-label">⬇️ رابط تحميل الملف (اختياري)</label>
+    <input class="form-input" type="url" id="delivery-file-url" placeholder="https://drive.google.com/... أو أي رابط تحميل">
+    <div class="form-hint">يظهر للعميل في صفحة "ملفاتي المُسلَّمة" كزر تحميل مباشر</div>
   </div>
   <input type="hidden" id="delivery-order-id">
   <div style="display:flex;gap:10px">
@@ -1269,10 +1402,10 @@ function renderProducts(cat){
           <div class="product-price-wrap">
             <div class="product-meta">
               ${disc>0?`<span class="product-discount">-${disc}%</span>`:''}
-              ${p.originalPrice?`<span class="product-original-price">${p.originalPrice} ر.س</span>`:''}
+              ${p.originalPrice?`<span class="product-original-price">${p.originalPrice} $</span>`:''}
             </div>
             <div class="product-price-row">
-              <span class="product-price-currency">ر.س</span>
+              <span class="product-price-currency">$</span>
               <span class="product-price">${p.price}</span>
             </div>
           </div>
@@ -1335,11 +1468,11 @@ function openProductDetail(productId){
       <div class="pd-desc">${(isEn?p.descEn:p.descAr)||''}</div>
       <div class="pd-price-block">
         <span class="pd-price-main">${p.price}</span>
-        <span style="font-size:14px;color:var(--text-muted)">ر.س</span>
-        ${p.originalPrice?`<span class="pd-price-orig">${p.originalPrice} ر.س</span>`:''}
+        <span style="font-size:14px;color:var(--text-muted)">$</span>
+        ${p.originalPrice?`<span class="pd-price-orig">${p.originalPrice} $</span>`:''}
         ${disc>0?`<span class="pd-price-disc">-${disc}%</span>`:''}
       </div>
-      <button class="pd-add-btn" onclick="addToCart(${p.id},this)">🛒 أضف للسلة — ${p.price} ر.س</button>
+      <button class="pd-add-btn" onclick="addToCart(${p.id},this)">🛒 أضف للسلة — ${p.price} $</button>
       <div class="pd-features">
         <div class="pd-feature-item"><span class="pd-feature-icon">⚡</span> تسليم فوري عبر Discord</div>
         <div class="pd-feature-item"><span class="pd-feature-icon">🔐</span> دفع آمن ومضمون</div>
@@ -1555,11 +1688,28 @@ function addToCart(productId,btn){
 function removeFromCart(id){state.cart=state.cart.filter(i=>i.id!==id);updateCartUI()}
 function changeQty(id,d){const i=state.cart.find(x=>x.id===id);if(!i)return;i.qty+=d;if(i.qty<=0)removeFromCart(id);else updateCartUI()}
 function updateCartUI(){
-  const total=state.cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const subtotal=state.cart.reduce((s,i)=>s+i.price*i.qty,0);
   const count=state.cart.reduce((s,i)=>s+i.qty,0);
   const ce=document.getElementById('cart-count');
   if(ce){ce.textContent=count;ce.style.display=count>0?'flex':'none'}
-  const te=document.getElementById('cart-total'); if(te) te.textContent=total;
+  const te=document.getElementById('cart-total'); if(te) te.textContent=subtotal.toFixed(2);
+
+  // Coupon discount display
+  const discountLine=document.getElementById('cart-discount-line');
+  const finalRow=document.getElementById('cart-final-row');
+  const discAmt=document.getElementById('cart-discount-amount');
+  const finalTotal=document.getElementById('cart-final-total');
+  if(state.appliedCoupon && discountLine && finalRow){
+    const disc=Math.round(subtotal*state.appliedCoupon.discount/100*100)/100;
+    if(discAmt) discAmt.textContent=disc.toFixed(2);
+    if(finalTotal) finalTotal.textContent=(subtotal-disc).toFixed(2);
+    discountLine.style.display='flex';
+    finalRow.style.display='flex';
+  } else {
+    if(discountLine) discountLine.style.display='none';
+    if(finalRow) finalRow.style.display='none';
+  }
+
   const list=document.getElementById('cart-items-list'); if(!list) return;
   const isEn=state.lang==='en';
   if(!state.cart.length){
@@ -1568,7 +1718,7 @@ function updateCartUI(){
     list.innerHTML=state.cart.map(item=>`
       <div class="cart-item">
         <div class="cart-item-icon">${item.imageUrl?`<img src="${item.imageUrl}" onerror="this.style.display='none'">`:(item.icon||'📦')}</div>
-        <div class="cart-item-info"><div class="cart-item-name">${isEn?item.nameEn:item.nameAr}</div><div class="cart-item-price">${item.price*item.qty} ر.س</div></div>
+        <div class="cart-item-info"><div class="cart-item-name">${isEn?item.nameEn:item.nameAr}</div><div class="cart-item-price">${(item.price*item.qty).toFixed(2)} $</div></div>
         <div class="cart-item-controls">
           <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
           <span class="qty-num">${item.qty}</span>
@@ -1582,6 +1732,139 @@ function toggleCart(){
   state.cartOpen=!state.cartOpen;
   document.getElementById('cart-sidebar').classList.toggle('open',state.cartOpen);
   document.getElementById('overlay').classList.toggle('show',state.cartOpen);
+}
+
+/* ===== COUPON SYSTEM ===== */
+// Define your coupons here (code → discount%)
+const COUPONS = {
+  'SAVE10': 10,
+  'WELCOME20': 20,
+  'VIP30': 30,
+  '4ESTORE': 15,
+  'DISCORD15': 15,
+};
+state.appliedCoupon = null;
+
+function applyCoupon(){
+  const code = (document.getElementById('coupon-input').value||'').trim().toUpperCase();
+  const statusEl = document.getElementById('coupon-status');
+  const discountLine = document.getElementById('cart-discount-line');
+  const finalRow = document.getElementById('cart-final-row');
+  const codeDisplay = document.getElementById('cart-coupon-code-display');
+
+  if(!code){
+    statusEl.innerHTML='<span style="color:var(--warning)">أدخل كود الخصم</span>';
+    return;
+  }
+
+  const discount = COUPONS[code];
+  if(!discount){
+    state.appliedCoupon = null;
+    statusEl.innerHTML='<span style="color:var(--danger)">✗ كود الخصم غير صحيح</span>';
+    if(discountLine) discountLine.style.display='none';
+    if(finalRow) finalRow.style.display='none';
+    updateCartUI();
+    return;
+  }
+
+  state.appliedCoupon = {code, discount};
+  statusEl.innerHTML=`<span style="color:var(--neon-green)">✅ تم تطبيق خصم ${discount}%!</span>`;
+  if(codeDisplay) codeDisplay.textContent=code+' -'+discount+'%';
+  updateCartUI();
+  showToast(`🎟️ كوبون ${code}: خصم ${discount}%!`,'success');
+}
+
+function removeCoupon(){
+  state.appliedCoupon = null;
+  document.getElementById('coupon-input').value='';
+  document.getElementById('coupon-status').innerHTML='';
+  const discountLine = document.getElementById('cart-discount-line');
+  const finalRow = document.getElementById('cart-final-row');
+  if(discountLine) discountLine.style.display='none';
+  if(finalRow) finalRow.style.display='none';
+  updateCartUI();
+}
+
+/* ===== MY ORDERS TABS ===== */
+function switchMyOrdersTab(tab, el){
+  document.querySelectorAll('.myorders-tab').forEach(b=>b.classList.remove('active'));
+  if(el) el.classList.add('active');
+  document.getElementById('myorders-tab-orders').style.display = tab==='orders' ? '' : 'none';
+  document.getElementById('myorders-tab-downloads').style.display = tab==='downloads' ? '' : 'none';
+  document.getElementById('myorders-tab-licenses').style.display = tab==='licenses' ? '' : 'none';
+  if(tab==='downloads') renderMyDownloads();
+  if(tab==='licenses') renderMyLicenses();
+}
+
+function renderMyDownloads(){
+  const container = document.getElementById('mydownloads-container');
+  if(!container || !state.currentUser) return;
+  const orders = (state.dbData.orders||[]).filter(o=>o.userId===state.currentUser.id && o.deliveredFileUrl);
+  if(!orders.length){
+    container.innerHTML=`<div class="myorders-empty"><div class="myorders-empty-icon">⬇️</div><div class="myorders-empty-text">لا توجد ملفات مُسلَّمة بعد<br><small style="color:var(--text-dim)">ستظهر هنا ملفات المنتجات بعد التسليم</small></div></div>`;
+    return;
+  }
+  container.innerHTML = orders.map(o=>{
+    const date = new Date(o.deliveredAt||o.updatedAt||o.createdAt).toLocaleDateString('ar-SA',{year:'numeric',month:'short',day:'numeric'});
+    const prods = (o.products||[]).map(p=>p.nameAr).join(', ');
+    return `<div class="order-card">
+      <div class="order-card-header">
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <span class="order-card-id">${o.id}</span>
+          <span class="order-card-date">📅 ${date}</span>
+        </div>
+        <span class="status-badge completed">✅ مُسلَّم</span>
+      </div>
+      <div class="order-card-body">
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:12px">📦 ${prods}</div>
+        <div class="delivered-content-box">
+          <div class="delivered-content-label">⬇️ ملف التحميل</div>
+          <a href="${o.deliveredFileUrl}" target="_blank" rel="noopener" class="download-btn">⬇️ تحميل الملف</a>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderMyLicenses(){
+  const container = document.getElementById('mylicenses-container');
+  if(!container || !state.currentUser) return;
+  const orders = (state.dbData.orders||[]).filter(o=>o.userId===state.currentUser.id && o.deliveredLicenseKey);
+  if(!orders.length){
+    container.innerHTML=`<div class="myorders-empty"><div class="myorders-empty-icon">🔑</div><div class="myorders-empty-text">لا توجد مفاتيح ترخيص بعد<br><small style="color:var(--text-dim)">تظهر هنا مفاتيح المنتجات بعد التسليم</small></div></div>`;
+    return;
+  }
+  container.innerHTML = orders.map(o=>{
+    const date = new Date(o.deliveredAt||o.updatedAt||o.createdAt).toLocaleDateString('ar-SA',{year:'numeric',month:'short',day:'numeric'});
+    const prods = (o.products||[]).map(p=>p.nameAr).join(', ');
+    return `<div class="order-card">
+      <div class="order-card-header">
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <span class="order-card-id">${o.id}</span>
+          <span class="order-card-date">📅 ${date}</span>
+        </div>
+        <span class="status-badge completed">✅ مُسلَّم</span>
+      </div>
+      <div class="order-card-body">
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:12px">📦 ${prods}</div>
+        <div class="delivered-content-box">
+          <div class="delivered-content-label">🔑 مفتاح الترخيص</div>
+          <div class="license-key-box">
+            ${o.deliveredLicenseKey}
+            <button class="license-key-copy" onclick="copyLicenseKey('${o.id}','${o.deliveredLicenseKey.replace(/'/g,"\\'")}')">📋 نسخ</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function copyLicenseKey(orderId, key){
+  navigator.clipboard.writeText(key).then(()=>{
+    showToast('✅ تم نسخ مفتاح الترخيص!','success');
+  }).catch(()=>{
+    showToast('خطأ في النسخ','error');
+  });
 }
 
 /* ===== AUTH ===== */
@@ -1660,13 +1943,17 @@ function initSecretAccess(){
 function startCheckout(){
   if(!state.cart.length){showToast('السلة فارغة!','warning');return}
   if(!state.currentUser){toggleCart();setTimeout(()=>openLoginModal(),350);return}
-  const total=state.cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const subtotal=state.cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const coupon=state.appliedCoupon;
+  const discountAmt=coupon?Math.round(subtotal*coupon.discount/100*100)/100:0;
+  const total=Math.round((subtotal-discountAmt)*100)/100;
   document.getElementById('checkout-username-badge').textContent=state.currentUser.name||state.currentUser.username;
   const summary=document.getElementById('checkout-order-summary');
   const isEn=state.lang==='en';
   summary.innerHTML=`<div class="order-summary-title">${isEn?'Order Summary':'ملخص الطلب'}</div>
-    ${state.cart.map(i=>`<div class="order-line"><span>${isEn?i.nameEn:i.nameAr} × ${i.qty}</span><strong>${i.price*i.qty} ر.س</strong></div>`).join('')}
-    <div class="order-total-line"><span class="order-total-label">${isEn?'Total':'الإجمالي'}</span><span class="order-total-value">${total} ر.س</span></div>`;
+    ${state.cart.map(i=>`<div class="order-line"><span>${isEn?i.nameEn:i.nameAr} × ${i.qty}</span><strong>${(i.price*i.qty).toFixed(2)} $</strong></div>`).join('')}
+    ${coupon?`<div class="order-line" style="color:var(--neon-green)"><span>🎟️ كوبون (${coupon.code} -${coupon.discount}%)</span><strong>-${discountAmt.toFixed(2)} $</strong></div>`:''}
+    <div class="order-total-line"><span class="order-total-label">${isEn?'Total':'الإجمالي'}</span><span class="order-total-value">${total.toFixed(2)} $</span></div>`;
   toggleCart(); openModal('checkout-modal');
 }
 
@@ -1675,12 +1962,16 @@ let _lastOrderId = ''; // track for proof upload from success modal
 async function submitOrder(){
   const notes=document.getElementById('checkout-notes').value.trim();
   const orderId='#4E-'+Math.floor(1000+Math.random()*9000);
-  const total=state.cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const subtotal=state.cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const coupon=state.appliedCoupon;
+  const discountAmt=coupon?Math.round(subtotal*coupon.discount/100*100)/100:0;
+  const total=Math.round((subtotal-discountAmt)*100)/100;
   const order={
     id:orderId, userId:state.currentUser.id, customerName:state.currentUser.name,
     username:state.currentUser.username, discord:state.currentUser.discord,
     discordId:state.currentUser.discordId||'',
     products:state.cart.map(i=>({id:i.id,nameAr:i.nameAr,nameEn:i.nameEn,price:i.price,qty:i.qty})),
+    subtotal, couponCode:coupon?coupon.code:'', couponDiscount:discountAmt,
     total, status:'pending', paymentProof:'', payLinkSentToCustomer:null, notes,
     createdAt:new Date().toISOString()
   };
@@ -1691,8 +1982,10 @@ async function submitOrder(){
     await saveDB();
     await notifyStaffNewOrder(order);
     _lastOrderId=orderId;
-    state.cart=[]; updateCartUI(); closeAll();
-    // Show success modal with order number
+    state.cart=[]; state.appliedCoupon=null;
+    document.getElementById('coupon-input').value='';
+    document.getElementById('coupon-status').innerHTML='';
+    updateCartUI(); closeAll();
     document.getElementById('success-order-num').textContent=orderId;
     document.getElementById('success-proof-input').value='';
     document.getElementById('success-proof-status').textContent='';
@@ -1732,7 +2025,7 @@ async function submitPaymentProof(orderId, proofUrl){
         fields:[
           {name:'الطلب',value:`\`${orderId}\``,inline:true},
           {name:'العميل',value:order.discord||order.username,inline:true},
-          {name:'المبلغ',value:`${order.total} ر.س`,inline:true},
+          {name:'المبلغ',value:`${order.total} $`,inline:true},
           {name:'رابط الإثبات',value:proofUrl}
         ],timestamp:new Date().toISOString(),footer:{text:'4E Store'}
       }]});
@@ -1772,14 +2065,14 @@ async function notifyStaffNewOrder(order){
   const cfg=getDiscordCfg();
   if(!cfg.staffWebhook) return;
   const products=(order.products||[]).map(p=>`${p.nameAr} × ${p.qty}`).join('\n');
-  const r=await sendWebhook(cfg.staffWebhook,{username:'4E Store Bot',embeds:[{title:'🛒 طلب جديد وارد!',color:0x8B5CF6,fields:[{name:'رقم الطلب',value:`\`${order.id}\``,inline:true},{name:'العميل',value:order.customerName||order.username,inline:true},{name:'Discord',value:order.discord||'—',inline:true},{name:'المنتجات',value:products||'—'},{name:'الإجمالي',value:`**${order.total} ر.س**`,inline:true},{name:'الملاحظات',value:order.notes||'—'}],timestamp:new Date().toISOString(),footer:{text:'4E Store'}}]});
+  const r=await sendWebhook(cfg.staffWebhook,{username:'4E Store Bot',embeds:[{title:'🛒 طلب جديد وارد!',color:0x8B5CF6,fields:[{name:'رقم الطلب',value:`\`${order.id}\``,inline:true},{name:'العميل',value:order.customerName||order.username,inline:true},{name:'Discord',value:order.discord||'—',inline:true},{name:'المنتجات',value:products||'—'},{name:'الإجمالي',value:`**${order.total} $**`,inline:true},{name:'الملاحظات',value:order.notes||'—'}],timestamp:new Date().toISOString(),footer:{text:'4E Store'}}]});
   if(r.ok) addBotLog(`✓ إشعار الطلب ${order.id} أُرسل للستاف`,'success');
   else addBotLog(`✗ فشل إشعار الستاف: ${r.error||r.status}`,'error');
 }
 
 async function notifyCustomerPayLink(order, payLink){
   const cfg=getDiscordCfg();
-  const msg=`💳 **رابط الدفع لطلبك جاهز!**\n\n📦 **رقم الطلب:** \`${order.id}\`\n💰 **المبلغ:** ${order.total} ر.س\n\n🔗 **رابط الدفع:**\n${payLink}\n\n✅ بعد الدفع سيتم إتمام طلبك فوراً. شكراً! 💜`;
+  const msg=`💳 **رابط الدفع لطلبك جاهز!**\n\n📦 **رقم الطلب:** \`${order.id}\`\n💰 **المبلغ:** ${order.total} $\n\n🔗 **رابط الدفع:**\n${payLink}\n\n✅ بعد الدفع سيتم إتمام طلبك فوراً. شكراً! 💜`;
   let sent=false;
   if(cfg.botToken&&order.discordId){
     const r=await sendDiscordDM(order.discordId,msg);
@@ -1792,7 +2085,7 @@ async function notifyCustomerPayLink(order, payLink){
     else addBotLog(`✗ فشل webhook: ${r.error}`,'error');
   }
   if(cfg.staffWebhook){
-    await sendWebhook(cfg.staffWebhook,{username:'4E Store Bot',embeds:[{title:'💳 تم إرسال رابط الدفع للعميل',color:0x10B981,fields:[{name:'الطلب',value:`\`${order.id}\``,inline:true},{name:'العميل',value:order.discord||order.username,inline:true},{name:'المبلغ',value:`${order.total} ر.س`,inline:true},{name:'الرابط',value:payLink}],timestamp:new Date().toISOString()}]});
+    await sendWebhook(cfg.staffWebhook,{username:'4E Store Bot',embeds:[{title:'💳 تم إرسال رابط الدفع للعميل',color:0x10B981,fields:[{name:'الطلب',value:`\`${order.id}\``,inline:true},{name:'العميل',value:order.discord||order.username,inline:true},{name:'المبلغ',value:`${order.total} $`,inline:true},{name:'الرابط',value:payLink}],timestamp:new Date().toISOString()}]});
   }
   return sent;
 }
@@ -1800,7 +2093,7 @@ async function notifyCustomerPayLink(order, payLink){
 async function notifyOrderStatusChanged(order, newStatus){
   const cfg=getDiscordCfg();
   const labels={processing:'🔄 طلبك قيد التنفيذ الآن!',completed:'✅ تم إتمام طلبك بنجاح!',cancelled:'❌ تم إلغاء طلبك'};
-  const msg=`${labels[newStatus]||'📦 تحديث على طلبك'}\n\n📦 **رقم الطلب:** \`${order.id}\`\n💰 **المجموع:** ${order.total} ر.س\n\nشكراً لتسوقك في **4E Store** 💜`;
+  const msg=`${labels[newStatus]||'📦 تحديث على طلبك'}\n\n📦 **رقم الطلب:** \`${order.id}\`\n💰 **المجموع:** ${order.total} $\n\nشكراً لتسوقك في **4E Store** 💜`;
   let sent=false;
   if(cfg.botToken&&order.discordId){
     const r=await sendDiscordDM(order.discordId,msg);
@@ -1824,7 +2117,7 @@ async function submitPaymentProof(orderId, proofUrl){
     await saveDB();
     const cfg=getDiscordCfg();
     if(cfg.staffWebhook){
-      await sendWebhook(cfg.staffWebhook,{username:'4E Store Bot',embeds:[{title:'💳 عميل أرسل إثبات الدفع',color:0xA78BFA,fields:[{name:'الطلب',value:`\`${orderId}\``,inline:true},{name:'العميل',value:order.discord||order.username,inline:true},{name:'المبلغ',value:`${order.total} ر.س`,inline:true},{name:'رابط الإثبات',value:proofUrl}],timestamp:new Date().toISOString(),footer:{text:'4E Store'}}]});
+      await sendWebhook(cfg.staffWebhook,{username:'4E Store Bot',embeds:[{title:'💳 عميل أرسل إثبات الدفع',color:0xA78BFA,fields:[{name:'الطلب',value:`\`${orderId}\``,inline:true},{name:'العميل',value:order.discord||order.username,inline:true},{name:'المبلغ',value:`${order.total} $`,inline:true},{name:'رابط الإثبات',value:proofUrl}],timestamp:new Date().toISOString(),footer:{text:'4E Store'}}]});
     }
     return true;
   }catch(e){return false}
@@ -1865,8 +2158,14 @@ async function saveDiscordSettings(){
     corsProxy:      (document.getElementById('cors-proxy').value||'https://corsproxy.io/?url=').trim(),
     staffWebhook:   (document.getElementById('staff-webhook').value||'').trim(),
     customerWebhook:(document.getElementById('customer-webhook').value||'').trim(),
+    guildId:        (document.getElementById('discord-guild-id').value||'').trim(),
+    roleId:         (document.getElementById('discord-role-id').value||'').trim(),
+    inviteLink:     (document.getElementById('discord-invite-link').value||'').trim(),
   };
   state.dbData.discordSettings=cfg;
+  // Update floating Discord button link
+  const floatBtn=document.getElementById('discord-float-btn');
+  if(floatBtn && cfg.inviteLink) floatBtn.href=cfg.inviteLink;
   setSyncBadge('syncing');
   try{await saveDB();showToast('✓ تم حفظ إعدادات Discord','success');addBotLog('✓ إعدادات محفوظة','success')}
   catch(e){showToast('خطأ في الحفظ','error')}
@@ -1879,6 +2178,12 @@ function loadDiscordSettingsUI(){
   if(f('cors-proxy'))       f('cors-proxy').value=cfg.corsProxy||'https://corsproxy.io/?url=';
   if(f('staff-webhook'))    f('staff-webhook').value=cfg.staffWebhook||'';
   if(f('customer-webhook')) f('customer-webhook').value=cfg.customerWebhook||'';
+  if(f('discord-guild-id')) f('discord-guild-id').value=cfg.guildId||'';
+  if(f('discord-role-id'))  f('discord-role-id').value=cfg.roleId||'';
+  if(f('discord-invite-link')) f('discord-invite-link').value=cfg.inviteLink||'';
+  // Apply invite link to floating button
+  const floatBtn=document.getElementById('discord-float-btn');
+  if(floatBtn && cfg.inviteLink) floatBtn.href=cfg.inviteLink;
 }
 
 /* ===== ADMIN ===== */
@@ -1943,7 +2248,7 @@ function renderAdminStats(){
     <div class="admin-stat-card"><div class="admin-stat-icon purple">📦</div><div><div class="admin-stat-num">${orders.length}</div><div class="admin-stat-label">إجمالي الطلبات</div></div></div>
     <div class="admin-stat-card"><div class="admin-stat-icon yellow">⏳</div><div><div class="admin-stat-num">${orders.filter(o=>o.status==='pending').length}</div><div class="admin-stat-label">معلقة</div></div></div>
     <div class="admin-stat-card"><div class="admin-stat-icon green">✅</div><div><div class="admin-stat-num">${orders.filter(o=>o.status==='completed').length}</div><div class="admin-stat-label">مكتملة</div></div></div>
-    <div class="admin-stat-card"><div class="admin-stat-icon cyan">💰</div><div><div class="admin-stat-num">${total}</div><div class="admin-stat-label">إجمالي ر.س</div></div></div>
+    <div class="admin-stat-card"><div class="admin-stat-icon cyan">💰</div><div><div class="admin-stat-num">${total}</div><div class="admin-stat-label">إجمالي $</div></div></div>
     <div class="admin-stat-card"><div class="admin-stat-icon purple">🏷️</div><div><div class="admin-stat-num">${getProducts().length}</div><div class="admin-stat-label">منتجات</div></div></div>
     <div class="admin-stat-card"><div class="admin-stat-icon yellow">⭐</div><div><div class="admin-stat-num">${(state.dbData.reviews||[]).filter(r=>r.status==='pending').length}</div><div class="admin-stat-label">تقييمات معلقة</div></div></div>`;
 }
@@ -1970,7 +2275,7 @@ function renderOrdersTable(orders){
       <td style="color:var(--text);font-weight:600">${o.customerName||o.username}</td>
       <td><div class="discord-tag"><div class="d-icon">D</div><span title="${o.discordId||''}">${o.discord||'-'}</span></div></td>
       <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${products}">${products}</td>
-      <td style="font-family:'Orbitron',monospace;color:var(--primary-bright);font-weight:700">${o.total} ر.س</td>
+      <td style="font-family:'Orbitron',monospace;color:var(--primary-bright);font-weight:700">${o.total} $</td>
       <td>${o.paymentProof?`<span style="display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:5px;background:rgba(16,185,129,.1);color:var(--neon-green);font-size:10px;font-weight:700;border:1px solid rgba(16,185,129,.2)">💳 إثبات مرفق</span>`:'<span style="color:var(--text-dim);font-size:11px">—</span>'}</td>
       <td><span class="status-badge ${st.cls}">${st.icon} ${st.ar}</span></td>
       <td>${date}</td>
@@ -2006,7 +2311,7 @@ async function deleteOrder(orderId){
 function openPayLinkModal(orderId){
   const order=state.dbData.orders.find(o=>o.id===orderId); if(!order) return;
   const products=(order.products||[]).map(p=>`${p.nameAr} × ${p.qty}`).join(', ');
-  document.getElementById('pay-modal-info').innerHTML=`<strong>الطلب:</strong> ${order.id}<br><strong>العميل:</strong> ${order.customerName||order.username}<br><strong>Discord:</strong> ${order.discord||'-'} ${order.discordId?`(ID: ${order.discordId})`:''}<br><strong>المنتجات:</strong> ${products}<br><strong>المجموع:</strong> ${order.total} ر.س`;
+  document.getElementById('pay-modal-info').innerHTML=`<strong>الطلب:</strong> ${order.id}<br><strong>العميل:</strong> ${order.customerName||order.username}<br><strong>Discord:</strong> ${order.discord||'-'} ${order.discordId?`(ID: ${order.discordId})`:''}<br><strong>المنتجات:</strong> ${products}<br><strong>المجموع:</strong> ${order.total} $`;
   document.getElementById('pay-link-input').value=order.payLinkSentToCustomer||'';
   document.getElementById('pay-link-order-id').value=orderId;
   openModal('pay-link-modal');
@@ -2094,7 +2399,7 @@ function renderProductManager(){
         <span class="pm-emoji" ${p.imageUrl?'style="opacity:0;position:absolute"':''}>${p.icon||'📦'}</span></div>
       <div class="pm-card-body">
         <div class="pm-card-name">${isEn?p.nameEn:p.nameAr}</div>
-        <div class="pm-card-price">${p.price} ر.س ${p.originalPrice?`<span style="text-decoration:line-through;color:var(--text-dim);font-size:11px">${p.originalPrice}</span>`:''}</div>
+        <div class="pm-card-price">${p.price} $ ${p.originalPrice?`<span style="text-decoration:line-through;color:var(--text-dim);font-size:11px">${p.originalPrice}</span>`:''}</div>
         <div style="font-size:10px;color:var(--text-dim);margin-bottom:8px">${getCatLabel(p.cat)} ${p.extraImages&&p.extraImages.length?`· 🖼️ ${p.extraImages.length+1} صور`:(p.imageUrl?'· 🖼️ صورة':'')}${p.youtubeUrl?' · 🎬 فيديو':''}</div>
         <div class="pm-card-actions">
           <button class="pm-btn edit" onclick="openProductEdit(${p.id})">تعديل</button>
@@ -2259,45 +2564,87 @@ function openDeliverModal(orderId){
     `<strong>الطلب:</strong> ${order.id}<br><strong>العميل:</strong> ${order.customerName||order.username}<br><strong>Discord:</strong> ${order.discord||'—'} ${order.discordId?`(ID: ${order.discordId})`:'<span style="color:var(--warning)">(بدون ID — لن يصل DM)</span>'}<br><strong>المنتجات:</strong><br><pre style="margin-top:6px;color:var(--neon-green)">${products}</pre>`;
   document.getElementById('delivery-order-id').value=orderId;
   document.getElementById('delivery-content').value=`✅ طلبك جاهز!\n\nالمنتجات:\n${products}\n\n---\nمحتوى الطلب:\n(الصق هنا الأكواد أو روابط التفعيل أو أي معلومات للعميل)`;
+  document.getElementById('delivery-license-key').value=order.deliveredLicenseKey||'';
+  document.getElementById('delivery-file-url').value=order.deliveredFileUrl||'';
   openModal('deliver-order-modal');
 }
 
 async function deliverOrder(){
   const orderId=document.getElementById('delivery-order-id').value;
   const content=document.getElementById('delivery-content').value.trim();
+  const licenseKey=(document.getElementById('delivery-license-key').value||'').trim();
+  const fileUrl=(document.getElementById('delivery-file-url').value||'').trim();
   if(!content){showToast('أدخل محتوى الطلب','error');return}
   const order=state.dbData.orders.find(o=>o.id===orderId); if(!order) return;
 
   const cfg=getDiscordCfg();
-  const msg=`📦 **تم تسليم طلبك في 4E Store!**\n\n**رقم الطلب:** \`${order.id}\`\n\n${content}\n\n💜 شكراً لتسوقك معنا — 4E Store`;
+  let fullMsg=`📦 **تم تسليم طلبك في 4E Store!**\n\n**رقم الطلب:** \`${order.id}\`\n\n${content}`;
+  if(licenseKey) fullMsg+=`\n\n🔑 **مفتاح الترخيص:** \`${licenseKey}\``;
+  if(fileUrl) fullMsg+=`\n\n⬇️ **رابط التحميل:** ${fileUrl}`;
+  fullMsg+=`\n\n💜 شكراً لتسوقك معنا — 4E Store`;
 
   let sent=false;
   showToast('⏳ جاري إرسال الطلب للعميل عبر Discord...','info');
 
   // Try DM first
   if(cfg.botToken && order.discordId){
-    const r=await sendDiscordDM(order.discordId, msg);
+    const r=await sendDiscordDM(order.discordId, fullMsg);
     if(r.ok){sent=true;addBotLog(`✓ تم تسليم الطلب ${order.id} عبر DM لـ ${order.discord}`,'success')}
     else addBotLog(`✗ فشل DM تسليم الطلب: ${r.error}`,'error');
   }
   // Fallback to customer webhook
   if(!sent && cfg.customerWebhook){
-    const r=await sendWebhook(cfg.customerWebhook,{content:`${order.discordId?`<@${order.discordId}>`:`**@${order.discord}**`}\n${msg}`,username:'4E Store Bot'});
+    const r=await sendWebhook(cfg.customerWebhook,{content:`${order.discordId?`<@${order.discordId}>`:`**@${order.discord}**`}\n${fullMsg}`,username:'4E Store Bot'});
     if(r.ok){sent=true;addBotLog(`✓ تم تسليم الطلب ${order.id} عبر webhook`,'success')}
     else addBotLog(`✗ فشل webhook تسليم: ${r.error}`,'error');
   }
 
-  // Mark as delivered + update status
+  // Auto-assign Discord role after purchase
+  if(cfg.botToken && cfg.guildId && cfg.roleId && order.discordId){
+    await assignDiscordRole(order.discordId, cfg.guildId, cfg.roleId);
+  }
+
+  // Mark as delivered + save license key / file url
   order.delivered=true; order.deliveredAt=new Date().toISOString(); order.status='completed';
+  order.deliveredContent=content;
+  if(licenseKey) order.deliveredLicenseKey=licenseKey;
+  if(fileUrl) order.deliveredFileUrl=fileUrl;
   try{await saveDB();}catch(e){}
 
   // Notify staff
   if(cfg.staffWebhook){
-    await sendWebhook(cfg.staffWebhook,{username:'4E Store Bot',embeds:[{title:`✅ تم تسليم الطلب ${order.id}`,color:0x10B981,fields:[{name:'العميل',value:order.discord||order.username,inline:true},{name:'المجموع',value:`${order.total} ر.س`,inline:true},{name:'حالة الإرسال',value:sent?'✓ أُرسل بنجاح':'⚠️ لم يُرسل — تحقق من الإعدادات',inline:false}],timestamp:new Date().toISOString(),footer:{text:'4E Store'}}]});
+    await sendWebhook(cfg.staffWebhook,{username:'4E Store Bot',embeds:[{title:`✅ تم تسليم الطلب ${order.id}`,color:0x10B981,fields:[{name:'العميل',value:order.discord||order.username,inline:true},{name:'المجموع',value:`${order.total} $`,inline:true},{name:'مفتاح الترخيص',value:licenseKey||'—',inline:true},{name:'حالة الإرسال',value:sent?'✓ أُرسل بنجاح':'⚠️ لم يُرسل — تحقق من الإعدادات',inline:false}],timestamp:new Date().toISOString(),footer:{text:'4E Store'}}]});
   }
 
   closeAll(); renderAdminStats(); filterOrders(state.adminFilter,null);
   showToast(sent?`✅ تم تسليم الطلب ${order.id} بنجاح!`:`⚠️ لم يُرسل عبر Discord — تحقق من Bot Token وDiscord ID`,sent?'success':'warning');
+}
+
+async function assignDiscordRole(userId, guildId, roleId){
+  const cfg=getDiscordCfg();
+  if(!cfg.botToken||!guildId||!roleId||!userId) return;
+  try{
+    const proxy=cfg.corsProxy||'https://corsproxy.io/?url=';
+    const url=`https://discord.com/api/v10/guilds/${guildId}/members/${userId}/roles/${roleId}`;
+    const r=await fetch(proxy+encodeURIComponent(url),{
+      method:'PUT',
+      headers:{'Authorization':`Bot ${cfg.botToken}`,'Content-Type':'application/json','X-Audit-Log-Reason':'4E Store - Purchase'},
+      body:'{}'
+    });
+    if(r.ok||r.status===204){addBotLog(`✓ تم تعيين رول للعميل ${userId}`,'success')}
+    else{addBotLog(`✗ فشل تعيين الرول: HTTP ${r.status}`,'error')}
+  }catch(e){addBotLog(`✗ خطأ تعيين الرول: ${e.message}`,'error')}
+}
+
+function saveDiscordInviteLink(){
+  const link=(document.getElementById('discord-invite-link').value||'').trim();
+  if(!link){showToast('أدخل رابط الدعوة','warning');return}
+  const btn=document.getElementById('discord-float-btn');
+  if(btn) btn.href=link;
+  // Also persist in discordSettings
+  state.dbData.discordSettings=state.dbData.discordSettings||{};
+  state.dbData.discordSettings.inviteLink=link;
+  saveDB().then(()=>showToast('✅ تم حفظ رابط الدعوة','success')).catch(()=>showToast('✓ تم تحديث الرابط (محلياً)','info'));
 }
 
 /* ===== NAVIGATION ===== */
@@ -2486,7 +2833,7 @@ function buildOrderCard(o){
       </div>
       <div style="display:flex;align-items:center;gap:8px">
         <span class="status-badge ${o.status}" style="font-size:12px">${st.icon} ${st.label}</span>
-        <span style="font-family:'Orbitron',monospace;font-size:15px;font-weight:900;color:var(--primary-bright)">${o.total} ر.س</span>
+        <span style="font-family:'Orbitron',monospace;font-size:15px;font-weight:900;color:var(--primary-bright)">${o.total} $</span>
       </div>
     </div>
     <div class="order-card-body">
