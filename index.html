@@ -565,22 +565,105 @@ body.ltr .orders-table th{text-align:left}
 .discord-role-section{background:rgba(88,101,242,.07);border:1px solid rgba(88,101,242,.2);border-radius:12px;padding:18px;margin-top:12px}
 .discord-role-label{font-size:13px;font-weight:700;color:#7289DA;margin-bottom:10px;display:flex;align-items:center;gap:8px}
 
+/* ---- HAMBURGER MENU BUTTON ---- */
+.nav-hamburger{display:none;width:40px;height:40px;border-radius:10px;background:rgba(139,92,246,.08);border:1px solid var(--border);align-items:center;justify-content:center;cursor:pointer;flex-direction:column;gap:5px;flex-shrink:0;transition:all .2s}
+.nav-hamburger:hover{border-color:var(--primary);background:rgba(139,92,246,.15)}
+.nav-hamburger span{display:block;width:18px;height:2px;background:var(--text-muted);border-radius:2px;transition:all .3s}
+.nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* ---- MOBILE DROPDOWN MENU ---- */
+#mobile-menu{display:none;position:fixed;top:70px;left:0;right:0;z-index:999;background:rgba(8,6,20,.97);border-bottom:1px solid rgba(139,92,246,.2);backdrop-filter:blur(24px);padding:16px;flex-direction:column;gap:4px;box-shadow:0 20px 40px rgba(0,0,0,.5)}
+#mobile-menu.open{display:flex}
+.mobile-nav-link{padding:13px 18px;border-radius:10px;color:var(--text-muted);font-size:14px;font-weight:600;cursor:pointer;border:1px solid transparent;transition:all .2s;text-align:right}
+.mobile-nav-link:hover,.mobile-nav-link.active{color:var(--primary-bright);background:rgba(139,92,246,.08);border-color:rgba(139,92,246,.15)}
+.mobile-menu-divider{height:1px;background:rgba(139,92,246,.1);margin:8px 0}
+
 @media(max-width:768px){
-  #navbar{padding:0 16px;gap:10px}
+  #navbar{padding:0 14px;gap:8px}
   .nav-links{display:none}
+  .nav-hamburger{display:flex}
   .nav-logo-text{font-size:13px;letter-spacing:2px}
+  .nav-btn.ghost{display:none}
+  .lang-toggle{padding:7px 10px;font-size:11px}
+
   .hero-title{font-size:32px}
-  #cart-sidebar{width:100%}
+  .hero-stats{gap:24px;margin-top:44px}
+  .stat-num{font-size:24px}
+  #hero{padding:40px 16px}
+
+  .section{padding:50px 16px}
+  .section-header{margin-bottom:36px}
+
+  #cart-sidebar{width:100%;right:-100%}
+  #cart-sidebar.open{right:0}
+
   .admin-stats{grid-template-columns:repeat(2,1fr)}
-  .modal{padding:26px}
-  .products-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
-  #toast-container{right:16px;bottom:16px}
-  .toast{max-width:calc(100vw - 32px)}
+  #admin-panel{padding:24px 16px}
+  .admin-tabs{gap:6px}
+  .admin-tab{padding:8px 14px;font-size:13px}
+
+  .modal{padding:22px 18px;width:94%;border-radius:18px}
+  .modal-title{font-size:19px}
+  .modal-icon{width:42px;height:42px}
+
+  .products-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
+  .product-body{padding:14px}
+  .product-name{font-size:14px}
+  .product-price{font-size:18px}
+  .product-icon-wrap{height:130px;font-size:44px}
+
+  #toast-container{right:12px;bottom:80px;left:12px;align-items:stretch}
+  .toast{max-width:100%;transform:translateY(20px)}
+  .toast.show{transform:translateY(0)}
+
   .order-status-track{gap:0}
   .status-label{font-size:9px}
+  .status-dot{width:22px;height:22px;font-size:10px}
+
   .proof-input-row{flex-direction:column}
   .proof-input{width:100%}
+
   .product-detail-grid{grid-template-columns:1fr}
+  .product-detail-wrap{padding:20px 16px 60px}
+
+  .features-grid{grid-template-columns:1fr 1fr;gap:12px}
+  .feature-card{padding:20px 16px}
+  .feature-icon{font-size:32px;margin-bottom:10px}
+  .feature-title{font-size:14px}
+  .feature-desc{font-size:12px}
+
+  .reviews-grid{grid-template-columns:1fr}
+
+  .cat-filters{gap:8px;margin-bottom:28px}
+  .cat-btn{padding:8px 14px;font-size:12px}
+
+  .myorders-header{flex-direction:column;align-items:flex-start}
+  .myorders-tabs{gap:6px}
+  .myorders-tab{padding:7px 14px;font-size:12px}
+  .order-card-header{padding:14px 16px}
+  .order-card-body{padding:14px 16px}
+
+  .discord-float{width:50px;height:50px;bottom:20px;left:16px}
+  .discord-float svg{width:24px;height:24px}
+
+  .corner-deco{display:none}
+
+  .orders-toolbar{padding:14px 16px}
+  .filter-tabs{flex-wrap:wrap;gap:6px}
+
+  .write-review-wrap{padding:20px 16px}
+
+  .cart-header{padding:18px 16px}
+  .cart-items{padding:14px}
+  .cart-footer{padding:16px}
+
+  .hero-actions{gap:10px}
+  .btn-hero-primary,.btn-hero-ghost{padding:13px 24px;font-size:14px}
+
+  .pd-price-main{font-size:28px}
+  .pd-add-btn{padding:14px 20px;font-size:15px}
 }
 </style>
 </head>
@@ -630,8 +713,21 @@ body.ltr .orders-table th{text-align:left}
     <button class="nav-btn ghost" onclick="openLoginModal()" id="login-btn">تسجيل الدخول</button>
     <!-- Admin button intentionally hidden — access via secret -->
     <div class="cart-btn" onclick="toggleCart()">🛒<span class="cart-count" id="cart-count" style="display:none">0</span></div>
+    <div class="nav-hamburger" id="nav-hamburger" onclick="toggleMobileMenu()" aria-label="القائمة">
+      <span></span><span></span><span></span>
+    </div>
   </div>
 </nav>
+
+<!-- MOBILE MENU -->
+<div id="mobile-menu">
+  <div class="mobile-nav-link active" onclick="showSection('home');closeMobileMenu()">🏠 الرئيسية</div>
+  <div class="mobile-nav-link" onclick="showSection('products');closeMobileMenu()">🛍️ المنتجات</div>
+  <div class="mobile-nav-link" onclick="showSection('reviews');closeMobileMenu()">⭐ التقييمات</div>
+  <div class="mobile-nav-link" id="mobile-myorders-link" style="display:none" onclick="showSection('myorders');closeMobileMenu()">📦 طلباتي</div>
+  <div class="mobile-menu-divider"></div>
+  <div class="mobile-nav-link" id="mobile-login-link" onclick="openLoginModal();closeMobileMenu()">🔑 تسجيل الدخول</div>
+</div>
 
 <!-- MAIN -->
 <div id="main">
@@ -2898,6 +2994,43 @@ function showToast(msg,type='info'){
   setTimeout(()=>toast.classList.add('show'),40);
   setTimeout(()=>{toast.classList.remove('show');setTimeout(()=>toast.remove(),350)},3500);
 }
+
+/* ===== MOBILE MENU ===== */
+function toggleMobileMenu(){
+  const menu=document.getElementById('mobile-menu');
+  const btn=document.getElementById('nav-hamburger');
+  const isOpen=menu.classList.contains('open');
+  if(isOpen){closeMobileMenu();}
+  else{menu.classList.add('open');btn.classList.add('open');}
+}
+function closeMobileMenu(){
+  document.getElementById('mobile-menu').classList.remove('open');
+  document.getElementById('nav-hamburger').classList.remove('open');
+}
+// Sync mobile menu "My Orders" link visibility with desktop
+const _origUpdateAuthUI=typeof updateAuthUI==='function'?updateAuthUI:null;
+function syncMobileMenuAuth(){
+  const myOrdersLink=document.getElementById('myorders-nav-link');
+  const mobileMyOrders=document.getElementById('mobile-myorders-link');
+  const loginBtn=document.getElementById('login-btn');
+  const mobileLoginLink=document.getElementById('mobile-login-link');
+  if(mobileMyOrders&&myOrdersLink) mobileMyOrders.style.display=myOrdersLink.style.display;
+  if(mobileLoginLink&&loginBtn) mobileLoginLink.style.display=loginBtn.style.display;
+}
+// Close mobile menu when overlay is clicked
+document.addEventListener('DOMContentLoaded',()=>{
+  const overlay=document.getElementById('overlay');
+  if(overlay){const orig=overlay.onclick;overlay.onclick=function(e){if(orig)orig.call(this,e);closeMobileMenu();};}
+  // Observe myorders link visibility
+  const myOrdersLink=document.getElementById('myorders-nav-link');
+  if(myOrdersLink&&window.MutationObserver){
+    new MutationObserver(syncMobileMenuAuth).observe(myOrdersLink,{attributes:true,attributeFilter:['style']});
+  }
+  const loginBtn=document.getElementById('login-btn');
+  if(loginBtn&&window.MutationObserver){
+    new MutationObserver(syncMobileMenuAuth).observe(loginBtn,{attributes:true,attributeFilter:['style']});
+  }
+});
 
 /* ===== INIT ===== */
 document.addEventListener('DOMContentLoaded',async()=>{
