@@ -711,7 +711,7 @@ body.ltr .orders-table th{text-align:left}
     <div class="loader-ring"></div>
     <div class="loader-ring"></div>
     <div class="loader-ring"></div>
-    <img class="loader-logo-img" src="https://media.discordapp.net/attachments/1413356895518851112/1497198472531546232/logo.png?ex=69eca63c&is=69eb54bc&hm=84fc84cf16fafb8dbcd5060bb3b91819f0610d31acd8a04cc8cd885c5e35fe35&animated=true" alt="4E Store">
+    <img class="loader-logo-img" src="https://cdn.discordapp.com/attachments/1408422860661325921/1497357898630565899/Logo.png?ex=69ed3ab6&is=69ebe936&hm=84004aa8a32214181e97ea22980ebeaf67ed455f9d629a6de57c637d6faab098&animated=true" alt="4E Store">
   </div>
   <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
   <div class="loader-text">LOADING...</div>
@@ -2634,7 +2634,10 @@ async function saveProduct(){
   setSyncBadge('syncing');
   showToast('⏳ جاري الحفظ والمزامنة...','info');
   try{
-    await saveDB(); closeAll(); renderProductManager(); renderProducts();
+    await saveDB();
+    // Pause auto-refresh for 10s so it doesn't overwrite with stale cache
+    window._refreshPausedUntil = Date.now() + 10000;
+    closeAll(); renderProductManager(); renderProducts();
     showToast('✓ تم حفظ المنتج ومزامنته','success');
   }catch(e){showToast('خطأ في المزامنة','warning')}
 }
@@ -3108,6 +3111,8 @@ function isAdminEditing(){
 function startAutoRefresh(){
   setInterval(async()=>{
     try{
+      // Skip if a save just happened (avoid stale JSONBin cache overwriting fresh data)
+      if(window._refreshPausedUntil && Date.now() < window._refreshPausedUntil) return;
       await loadDB();
       // Never interrupt admin while editing
       if(!isAdminEditing()){
