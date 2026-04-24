@@ -144,8 +144,8 @@ body{font-family:'Cairo',sans-serif;background:var(--bg-void);color:var(--text);
 .card-shine{position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.04) 50%,transparent 60%);background-size:200% 200%;opacity:0;transition:opacity .4s;pointer-events:none;z-index:2}
 .product-card:hover .card-shine{opacity:1;animation:holoShine 1.5s ease-in-out infinite}
 @keyframes holoShine{0%{background-position:200% 200%}100%{background-position:0% 0%}}
-.product-icon-wrap{height:160px;display:flex;align-items:center;justify-content:center;font-size:56px;background:linear-gradient(180deg,rgba(20,16,42,.8) 0%,rgba(12,10,28,.9) 100%);position:relative;overflow:hidden}
-.product-icon-wrap img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.product-icon-wrap{height:200px;display:flex;align-items:center;justify-content:center;font-size:56px;background:linear-gradient(180deg,rgba(20,16,42,.8) 0%,rgba(12,10,28,.9) 100%);position:relative;overflow:hidden}
+.product-icon-wrap img{width:100%;height:100%;object-fit:contain;position:absolute;inset:0;padding:8px}
 .product-emoji{position:relative;z-index:1}
 .product-icon-wrap::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(139,92,246,.15) 0%,transparent 70%);opacity:0;transition:opacity .4s}
 .product-card:hover .product-icon-wrap::before{opacity:1}
@@ -483,13 +483,13 @@ footer::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;
 .product-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
 .pd-gallery{position:relative}
 .pd-main-media{width:100%;aspect-ratio:1;border-radius:18px;overflow:hidden;background:rgba(16,13,34,.9);border:1px solid var(--border);position:relative;display:flex;align-items:center;justify-content:center}
-.pd-main-media img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.pd-main-media img{width:100%;height:100%;object-fit:contain;position:absolute;inset:0;padding:12px}
 .pd-main-media video{width:100%;height:100%;object-fit:cover}
 .pd-main-media .pd-emoji-big{font-size:80px;z-index:1}
 .pd-thumb-row{display:flex;gap:10px;margin-top:12px;overflow-x:auto;padding-bottom:4px}
 .pd-thumb{width:72px;height:72px;border-radius:10px;overflow:hidden;border:2px solid rgba(139,92,246,.15);cursor:pointer;flex-shrink:0;transition:all .25s;background:rgba(16,13,34,.9);display:flex;align-items:center;justify-content:center;font-size:26px;position:relative}
 .pd-thumb:hover,.pd-thumb.active{border-color:var(--primary);box-shadow:0 0 12px rgba(139,92,246,.4)}
-.pd-thumb img{width:100%;height:100%;object-fit:cover}
+.pd-thumb img{width:100%;height:100%;object-fit:contain;padding:4px}
 .pd-thumb.yt-thumb::after{content:'▶';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;background:rgba(255,0,0,.5)}
 .pd-title{font-size:clamp(22px,4vw,34px);font-weight:900;color:var(--text);line-height:1.2;margin-bottom:12px;font-family:'Rajdhani',sans-serif}
 .pd-desc{font-size:14px;color:var(--text-muted);line-height:1.8;margin-bottom:22px}
@@ -1362,7 +1362,7 @@ function addBotLog(msg, type='info'){
   if(el) el.innerHTML=botLogEntries.map(e=>`<div class="bot-log-entry ${e.type}">[${e.t}] ${e.msg}</div>`).join('');
 }
 
-try{const s=sessionStorage.getItem('4e_session');if(s)state.currentUser=JSON.parse(s)}catch(e){}
+try{const s=localStorage.getItem('4e_session');if(s)state.currentUser=JSON.parse(s)}catch(e){}
 
 /* ===== DEFAULT DATA ===== */
 const DEFAULT_CATEGORIES = [
@@ -1972,7 +1972,7 @@ async function doLogin(){
   await loadDB();
   const user=state.dbData.users.find(u=>u.username.toLowerCase()===username.toLowerCase()&&u.password===password);
   if(!user){showToast('بيانات غير صحيحة','error');return}
-  state.currentUser=user; sessionStorage.setItem('4e_session',JSON.stringify(user));
+  state.currentUser=user; localStorage.setItem('4e_session',JSON.stringify(user));
   updateAuthUI(); closeAll(); showToast(`مرحباً ${user.name}! 👋`,'success');
 }
 async function doRegister(){
@@ -1990,11 +1990,11 @@ async function doRegister(){
   state.dbData.users.push(newUser);
   try{
     await saveDB(); state.currentUser=newUser;
-    sessionStorage.setItem('4e_session',JSON.stringify(newUser));
+    localStorage.setItem('4e_session',JSON.stringify(newUser));
     updateAuthUI(); closeAll(); showToast(`تم إنشاء الحساب! مرحباً ${name} 🎉`,'success');
   }catch(e){showToast('خطأ في إنشاء الحساب','error')}
 }
-function logout(){state.currentUser=null;state.isAdmin=false;sessionStorage.removeItem('4e_session');updateAuthUI();showToast('تم تسجيل الخروج','info')}
+function logout(){state.currentUser=null;state.isAdmin=false;localStorage.removeItem('4e_session');updateAuthUI();showToast('تم تسجيل الخروج','info')}
 function updateAuthUI(){
   const lb=document.getElementById('login-btn'), ub=document.getElementById('user-badge'), ubn=document.getElementById('user-badge-name');
   const moLink=document.getElementById('myorders-nav-link');
